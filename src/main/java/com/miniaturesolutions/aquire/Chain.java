@@ -16,6 +16,8 @@ public class Chain {
      * @param testTile
      */
     private List<Tile> tiles = new LinkedList<>();
+    
+    private Corporation owner;
 
     public void addTile(Tile testTile) {
         tiles.add(testTile);
@@ -40,4 +42,28 @@ public class Chain {
 
         return mergedChain;
     }
+
+    /**
+     * Safe if size is 11 or more
+     * @return
+     */
+	public boolean safe() {
+		return (length() > 10);
+	}
+
+	/**
+	 * Set the chains owning corporation
+	 * @param object
+	 */
+	public void setOwner(Corporation owner) {
+		this.owner = owner;
+	}
+	
+	/**
+	 * Who owns the chain
+	 * @return
+	 */
+	public Corporation getOwner() {
+		return owner;
+	}
 }

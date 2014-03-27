@@ -2,7 +2,7 @@ package com.miniaturesolutions.aquire;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,5 +41,30 @@ public class ChainTest {
         Chain result =  testChain1.merge(testChain2);
 
         assertEquals("Correct chain length", result.length(), (testChain1.length() + testChain2.length()));
+    }
+    
+    @Test
+    public void safeChain() {
+    	Chain testChain = new Chain();
+        Tile testTile1 = new Tile(0,0);    	
+    	assertFalse("Should not be safe", testChain.safe());
+    	
+    	for(int x=1; x < 20; x++) {
+            testChain.addTile(testTile1); 
+    		if (x < 11) {
+    	       	assertFalse("Should not be safe", testChain.safe());    			
+    		} else {
+    	       	assertTrue("Should be safe if x >= 11", testChain.safe());
+    		} 		
+    	}
+    }
+    
+    @Test
+    public void chainOwnerShip() {
+    	Chain testChain = new Chain();
+    	
+    	testChain.setOwner(Corporation.UNINCORPORATED);
+    	
+    	assertEquals("Should be unincorporated",testChain.getOwner(),Corporation.UNINCORPORATED);
     }
 }
