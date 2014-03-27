@@ -87,14 +87,6 @@ final private int totalNoOfShares;
 		return this.tier;
 	}
 
-	/**
-	 * Is the Corporation in play?
-	 * @return
-	 */
-	public boolean isActive() {
-		return false;
-	}
-
 	/** 
 	 * How many shares are available
 	 * @return

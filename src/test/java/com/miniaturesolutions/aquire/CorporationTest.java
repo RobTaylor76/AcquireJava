@@ -32,12 +32,6 @@ public class CorporationTest {
 		assertEquals("should be GOLD",  Tier.GOLD, corp.getTier());
 	}
 	
-	@Test
-	public void activeCorporation() {
-		Corporation corp = Corporation.UNINCORPORATED;
-		
-		assertFalse("Unicorporated are never active", corp.isActive());
-	}
 
 	@Test
 	public void availableShares() {
