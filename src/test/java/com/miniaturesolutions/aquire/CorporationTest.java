@@ -58,7 +58,7 @@ public class CorporationTest {
 	
 		//Tier tier = Tier.BRONZE;
 		for (Tier tier : Tier.values()) {
-			if (tier == tier.NONE) {
+			if (tier == Tier.NONE) {
 				continue;
 			}
 			
@@ -69,26 +69,83 @@ public class CorporationTest {
 			if (tier == Tier.GOLD) {
 				tierUplift = 200;
 			} 
-			for(int i=2; i< 7; i++ ) { 
-				assertEquals((i*100) + tierUplift, tier.getSharePrice(i));
+			for(int noOfTiles=2; noOfTiles< 7; noOfTiles++ ) { 
+				assertEquals((noOfTiles*100) + tierUplift, tier.getSharePrice(noOfTiles));
 			}
-			for (int i=6; i< 11; i++) {
-				assertEquals(600 + tierUplift, tier.getSharePrice(i));
+			for (int noOfTiles=6; noOfTiles< 11; noOfTiles++) {
+				assertEquals(600 + tierUplift, tier.getSharePrice(noOfTiles));
 			}
-			for (int i=11; i< 21; i++) {
-				assertEquals(700 + tierUplift, tier.getSharePrice(i));
+			for (int noOfTiles=11; noOfTiles< 21; noOfTiles++) {
+				assertEquals(700 + tierUplift, tier.getSharePrice(noOfTiles));
 			}	
-			for (int i=21; i< 31; i++) {
-				assertEquals(800 + tierUplift, tier.getSharePrice(i));
+			for (int noOfTiles=21; noOfTiles< 31; noOfTiles++) {
+				assertEquals(800 + tierUplift, tier.getSharePrice(noOfTiles));
 			}	
-			for (int i=31; i< 41; i++) {
-				assertEquals(900 + tierUplift, tier.getSharePrice(i));
+			for (int noOfTiles=31; noOfTiles< 41; noOfTiles++) {
+				assertEquals(900 + tierUplift, tier.getSharePrice(noOfTiles));
 			}	
-			for (int i=41; i< 100; i++) {
-				assertEquals(1000 + tierUplift, tier.getSharePrice(i));
+			for (int noOfTiles=41; noOfTiles< 100; noOfTiles++) {
+				assertEquals(1000 + tierUplift, tier.getSharePrice(noOfTiles));
 			}				
 		}
 
 	
 	}
+
+	@Test 
+	public void tieredShareHolderBonus() {
+	
+		//Tier tier = Tier.BRONZE;
+		for (Tier tier : Tier.values()) {
+			if (tier == Tier.NONE) {
+				continue;
+			}
+			
+			int majorityUplift = 0;
+			int minorityUplift = 0;
+			if (tier == Tier.SILVER) {
+				majorityUplift = 1000;
+				minorityUplift = 500;
+			} 
+			if (tier == Tier.GOLD) {
+				majorityUplift = 2000;
+				minorityUplift = 1000;
+			} 
+			
+			ShareHolderBonus bonus;
+			for(int noOfTiles=2; noOfTiles< 7; noOfTiles++ ) { 
+				bonus = tier.getShareHolderBonus(noOfTiles);
+				assertEquals((noOfTiles*1000) + majorityUplift, bonus.getMajority());
+				assertEquals((noOfTiles * 500) + minorityUplift, bonus.getMinority());
+			}
+			for (int noOfTiles=6; noOfTiles< 11; noOfTiles++) {
+				bonus = tier.getShareHolderBonus(noOfTiles);
+				assertEquals(6000 + majorityUplift, bonus.getMajority());
+				assertEquals(3000 + minorityUplift, bonus.getMinority());
+			}
+			for (int noOfTiles=11; noOfTiles< 21; noOfTiles++) {
+				bonus = tier.getShareHolderBonus(noOfTiles);
+				assertEquals(7000 + majorityUplift, bonus.getMajority());
+				assertEquals(3500 + minorityUplift, bonus.getMinority());
+			}	
+			for (int noOfTiles=21; noOfTiles< 31; noOfTiles++) {
+				bonus = tier.getShareHolderBonus(noOfTiles);
+				assertEquals(8000 + majorityUplift, bonus.getMajority());
+				assertEquals(4000 + minorityUplift, bonus.getMinority());
+			}	
+			for (int noOfTiles=31; noOfTiles< 41; noOfTiles++) {
+				bonus = tier.getShareHolderBonus(noOfTiles);
+				assertEquals(9000 + majorityUplift, bonus.getMajority());
+				assertEquals(4500 + minorityUplift, bonus.getMinority());
+			}	
+			for (int noOfTiles=41; noOfTiles< 100; noOfTiles++) {
+				bonus = tier.getShareHolderBonus(noOfTiles);
+				assertEquals(10000 + majorityUplift, bonus.getMajority());
+				assertEquals(5000 + minorityUplift, bonus.getMinority());
+			}				
+		}
+
+	
+	}
+
 }

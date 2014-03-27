@@ -34,35 +34,63 @@ final private int totalNoOfShares;
 		BRONZE(0),
 		SILVER(100),
 		GOLD(200);
-		
-		final private int sharePriceUplift;
 
+		final private int sharePriceUplift;
+		
 		private Tier(int sharePriceUplift) {
 			this.sharePriceUplift = sharePriceUplift;
 		}
-		public int  getSharePrice(int noOfActiveShares) {
+		
+		/**
+		 * What is the current share price based on the number of tiles in 
+		 * the corporation?
+		 * @param noOfTiles
+		 * @return the current share price
+		 */
+		public int  getSharePrice(int noOfTiles) {
 			int price = 0;
-			if (noOfActiveShares < 7) {
-				price = noOfActiveShares * 100;
-			} else if (noOfActiveShares < 11) {
+			if (noOfTiles < 7) {
+				price = noOfTiles * 100;
+			} else if (noOfTiles < 11) {
 				price = 600;
-			} else if (noOfActiveShares < 21) {
+			} else if (noOfTiles < 21) {
 				price = 700;
-			} else if (noOfActiveShares < 31) {
+			} else if (noOfTiles < 31) {
 				price = 800;
-			} else if (noOfActiveShares < 41) {
+			} else if (noOfTiles < 41) {
 				price = 900;
 			} else {
 				price = 1000;
 			}
 			return price + sharePriceUplift;
 		}
+
+		/**
+		 * What is the shareholder bonus based on the number of tiles
+		 * @param noOfTiles
+		 * @return
+		 */
+		public ShareHolderBonus getShareHolderBonus(int noOfTiles) {
+
+			int majority = getSharePrice(noOfTiles) * 10;
+			int minority = majority / 2;
+		
+			return new ShareHolderBonus(majority,minority);
+		}
 	}
 
+	/**
+	 *  What tier is associated with the Corporation
+	 * @return
+	 */
 	public Tier getTier() {
 		return this.tier;
 	}
 
+	/**
+	 * Is the Corporation in play?
+	 * @return
+	 */
 	public boolean isActive() {
 		return false;
 	}
