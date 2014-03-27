@@ -30,10 +30,33 @@ final private int totalNoOfShares;
 	 *
 	 */
 	public enum Tier {
-		NONE,
-		BRONZE,
-		SILVER,
-		GOLD
+		NONE(0),
+		BRONZE(0),
+		SILVER(100),
+		GOLD(200);
+		
+		final private int sharePriceUplift;
+
+		private Tier(int sharePriceUplift) {
+			this.sharePriceUplift = sharePriceUplift;
+		}
+		public int  getSharePrice(int noOfActiveShares) {
+			int price = 0;
+			if (noOfActiveShares < 7) {
+				price = noOfActiveShares * 100;
+			} else if (noOfActiveShares < 11) {
+				price = 600;
+			} else if (noOfActiveShares < 21) {
+				price = 700;
+			} else if (noOfActiveShares < 31) {
+				price = 800;
+			} else if (noOfActiveShares < 41) {
+				price = 900;
+			} else {
+				price = 1000;
+			}
+			return price + sharePriceUplift;
+		}
 	}
 
 	public Tier getTier() {

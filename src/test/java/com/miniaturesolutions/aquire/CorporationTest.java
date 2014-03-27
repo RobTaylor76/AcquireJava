@@ -52,4 +52,43 @@ public class CorporationTest {
 		}
 		
 	}
+	
+	@Test 
+	public void tieredSharePrices() {
+	
+		//Tier tier = Tier.BRONZE;
+		for (Tier tier : Tier.values()) {
+			if (tier == tier.NONE) {
+				continue;
+			}
+			
+			int tierUplift = 0;
+			if (tier == Tier.SILVER) {
+				tierUplift = 100;
+			} 
+			if (tier == Tier.GOLD) {
+				tierUplift = 200;
+			} 
+			for(int i=2; i< 7; i++ ) { 
+				assertEquals((i*100) + tierUplift, tier.getSharePrice(i));
+			}
+			for (int i=6; i< 11; i++) {
+				assertEquals(600 + tierUplift, tier.getSharePrice(i));
+			}
+			for (int i=11; i< 21; i++) {
+				assertEquals(700 + tierUplift, tier.getSharePrice(i));
+			}	
+			for (int i=21; i< 31; i++) {
+				assertEquals(800 + tierUplift, tier.getSharePrice(i));
+			}	
+			for (int i=31; i< 41; i++) {
+				assertEquals(900 + tierUplift, tier.getSharePrice(i));
+			}	
+			for (int i=41; i< 100; i++) {
+				assertEquals(1000 + tierUplift, tier.getSharePrice(i));
+			}				
+		}
+
+	
+	}
 }
