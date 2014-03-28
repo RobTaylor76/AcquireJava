@@ -42,7 +42,6 @@ public class Board {
     }
 
     private void buildAvailableTiles() {
-
         for (int column = 0; column < 9; column ++) {
             for (int row = 0; row < 12; row ++) {
                 availableTiles.add(new Tile(column,row));
@@ -81,43 +80,42 @@ public class Board {
      * @return
      */
     public boolean willTileCauseMerge(Tile tile) {
-        return (checkAbove(tile) || checkBelow(tile) || checkLeft(tile) || checkRight(tile));
+    	return  checkIfTileExists(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow()) ||
+    			checkIfTileExists(tile.getColumn() < 9,  tile.getColumn()+1, tile.getRow()) ||
+    			checkIfTileExists(tile.getRow()    > 0,  tile.getColumn(),   tile.getRow()-1) ||
+    			checkIfTileExists(tile.getRow()    < 10, tile.getColumn(),   tile.getRow()+1);
     }
 
-    private boolean checkLeft(Tile tile) {
+    /**
+     *  Which of the 2 Chains is the winner in a merger?
+     * @param chain1
+     * @param chain2
+     * @return winner or null if a tie
+     */
+	public Chain whoWinsMerge(Chain chain1, Chain chain2) {
+		Chain winner = null; // if no clear winner then we need to make a choice, just return null for now
+
+		if (chain1.getCorporation() == Corporation.UNINCORPORATED) {
+			winner = chain2;
+		}
+		if (chain2.getCorporation() == Corporation.UNINCORPORATED) {
+			winner = chain1;
+		}
+		
+		if (chain1.getTileCount() > chain2.getTileCount()) {
+			winner = chain1;
+		} else if (chain2.getTileCount() > chain1.getTileCount()) {
+			winner = chain2;
+		}
+
+		return winner;
+	}
+
+    private boolean checkIfTileExists(boolean condition, int column, int row) {
         boolean tilePresent = false;
-        if (tile.getColumn() > 0) {
-            Tile tmp = new Tile(tile.getColumn() -1, tile.getRow());
-            tilePresent = isTilePlaced(tmp.displayedAs());
+        if (condition) {
+            tilePresent = isTilePlaced(Tile.getTileName(column, row));              
         }
         return tilePresent;
     }
-    private boolean checkRight(Tile tile) {
-        boolean tilePresent = false;
-        if (tile.getColumn() < 8) {
-            Tile tmp = new Tile(tile.getColumn() +1, tile.getRow());
-            tilePresent = isTilePlaced(tmp.displayedAs());
-        }
-        return tilePresent;   }
-
-
-    private boolean checkAbove(Tile tile) {
-        boolean tilePresent = false;
-        if (tile.getRow() > 0) {
-            Tile tmp = new Tile(tile.getColumn(), tile.getRow()-1);
-            tilePresent = isTilePlaced(tmp.displayedAs());
-        }
-        return tilePresent;
-    }
-    private boolean checkBelow(Tile tile) {
-        boolean tilePresent = false;
-        if (tile.getRow() < 10) {
-            Tile tmp = new Tile(tile.getColumn(), tile.getRow() +1);
-            tilePresent = isTilePlaced(tmp.displayedAs());
-        }
-        return tilePresent;
-    }
-
-
-
 }

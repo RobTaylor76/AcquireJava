@@ -2,6 +2,8 @@ package com.miniaturesolutions.aquire;
 
 import static org.junit.Assert.*;
 
+//import org.mockito.Mockito;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,15 +13,8 @@ public class BoardTest {
 
 	@Test
 	public void createAGameBoard() {
-		
 		Board board = new Board();
-		
 		List<Tile> tiles = board.getAvailableTiles();
-		
-		assertEquals("Should have 108 tiles", 108, tiles.size());
-		
-		Tile last = tiles.get(107);
-	
 		assertEquals("Should have 108 tiles", 108, tiles.size());
 	}
 
@@ -28,21 +23,13 @@ public class BoardTest {
         //can we have multiple chains for unicorporated tiles, if not how do we track placed uninCorporated tiles
 
         Board board = new Board();
-
         Chain testChain = board.getChain(Corporation.AMERICAN);
-
         assertEquals("Should be an empty chain", 0 ,testChain.getTileCount());
-
         testChain.addTile(new Tile(0,0));
-
         testChain = board.getChain(Corporation.AMERICAN);
-
         assertEquals("Should not be an empty chain", 1 ,testChain.getTileCount());
-
         testChain = board.getChain(Corporation.UNINCORPORATED);
-
         assertNull("no chain for unincorporated", testChain);
-
     }
 
     @Test
@@ -65,6 +52,33 @@ public class BoardTest {
         assertEquals("tile matches ", testTile2, board.getTile(testTile2.displayedAs()));
     }
 
+    @Test 
+    public void resolveMerges() {
+        Board board = new Board();
+    	Chain chain1 = new Chain();
+    	chain1.setCorporation(Corporation.UNINCORPORATED);
+    	Chain chain2 = new Chain();
+       	chain2.setCorporation(Corporation.AMERICAN);
+       	
+       	Chain winner = board.whoWinsMerge(chain1,chain2);    	
+       	assertEquals("AMERICAN should win", chain2, winner);
+        
+       	chain1.setCorporation(Corporation.SACKSON);
+       	
+       	//chain with most tiles wins
+       	for(int i=0; i<3; i++) {
+       		chain1.addTile(new Tile(i,0));
+       		chain2.addTile(new Tile(0,i));
+       	}
+
+       	winner = board.whoWinsMerge(chain1,chain2);    	
+       	assertNull("no winner as both have same number of tiles", winner);  
+       	
+       	chain1.addTile(new Tile(4,0));
+       	winner = board.whoWinsMerge(chain1,chain2);    	
+       	assertEquals("SACKSON should win", chain1, winner);   	
+    	
+    }
 
     @Test
     public void willTileCauseMerge() {
@@ -73,8 +87,8 @@ public class BoardTest {
         board.placeTile(new Tile(1,0));
         board.placeTile(new Tile(0,1));
 
-        board.placeTile(new Tile(10,8));
-        board.placeTile(new Tile(11,7));
+        board.placeTile(new Tile(8,10));
+        board.placeTile(new Tile(7,11));
 
         List<Tile> validMerges = new LinkedList<>();
         validMerges.add(new Tile(0,0));
@@ -82,10 +96,10 @@ public class BoardTest {
         validMerges.add(new Tile(1,1));
         validMerges.add(new Tile(0,2));
 
-        validMerges.add(new Tile(11,8));
-        validMerges.add(new Tile(10,7));
-        validMerges.add(new Tile(11,6));
-        validMerges.add(new Tile(9,8));
+        validMerges.add(new Tile(8,11));
+        validMerges.add(new Tile(7,10));
+        validMerges.add(new Tile(6,11));
+        validMerges.add(new Tile(8,9));
 
         List<Tile> noMerges = new LinkedList<>();
         noMerges.add(new Tile(0,3));
