@@ -19,18 +19,23 @@ public class Chain {
     
     private Corporation owner;
 
-    public void addTile(Tile testTile) {
-        tiles.add(testTile);
+    /**
+     * Takes ownership of tile
+     * @param tile
+     */
+    public void addTile(Tile tile) {
+        tiles.add(tile);
+        tile.setChain(this);
     }
 
-    public int length() {
+    /**
+     * How many tiles in chain
+     * @return
+     */
+    public int getTileCount() {
         return tiles.size();
     }
 
-
-    protected void addAllTiles(Chain chain) {
-        this.tiles.addAll(chain.tiles);
-    }
 
     /** return a new chain representing the merged chains **/
     public Chain merge(Chain chainToMerge) {
@@ -48,14 +53,14 @@ public class Chain {
      * @return
      */
 	public boolean safe() {
-		return (length() > 10);
+		return (getTileCount() > 10);
 	}
 
 	/**
 	 * Set the chains owning corporation
-	 * @param object
+	 * @param owner
 	 */
-	public void setOwner(Corporation owner) {
+	public void setCorporation(Corporation owner) {
 		this.owner = owner;
 	}
 	
@@ -63,7 +68,15 @@ public class Chain {
 	 * Who owns the chain
 	 * @return
 	 */
-	public Corporation getOwner() {
+	public Corporation getCorporation() {
 		return owner;
 	}
+
+
+
+    protected void addAllTiles(Chain chain) {
+        for(Tile tile: chain.tiles) {
+            addTile(tile);
+        }
+    }
 }

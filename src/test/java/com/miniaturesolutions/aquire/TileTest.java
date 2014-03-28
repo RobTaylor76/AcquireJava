@@ -3,6 +3,7 @@ package com.miniaturesolutions.aquire;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -41,8 +42,10 @@ public class TileTest {
         // (int column, int row)
         Tile testTile = new Tile(0,0);
 
+
         String tileName = testTile.toString();
         assertTrue("Correct Tile Name", tileName.equalsIgnoreCase("1A"));
+        assertTrue("Correct Tile Name", testTile.displayedAs().equalsIgnoreCase("1A"));
 
         assertTrue("Correct Tile Name", Tile.getTileName(0,0).equalsIgnoreCase("1A"));
 
@@ -65,4 +68,16 @@ public class TileTest {
         tileName =   Tile.getTileName(8,11);
         assertTrue("Correct Tile Name", tileName.equalsIgnoreCase("12I"));
      }
+
+    @Test
+    public void testChainMembership() {
+        Tile testTile = new Tile(0,0);
+        Chain chain = new Chain();
+
+        assertNull("Should not be a member of a chain", testTile.getChain());
+
+        testTile.setChain(chain);
+
+        assertEquals("should be a member of this chain", chain, testTile.getChain());
+    }
 }

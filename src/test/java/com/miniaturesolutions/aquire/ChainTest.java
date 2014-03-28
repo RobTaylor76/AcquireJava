@@ -3,6 +3,7 @@ package com.miniaturesolutions.aquire;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,12 +20,13 @@ public class ChainTest {
         Tile testTile = new Tile(0,0);
 
         testChain.addTile(testTile);
+        assertEquals("Correct chain getTileCount", testChain.getTileCount(), 1);
 
-        assertEquals("Correct chain length", testChain.length(), 1);
+        assertEquals("tile has been added to the chain", testChain, testTile.getChain());
 
         /* lets assume you won't add duplicates */
         testChain.addTile(testTile);
-        assertEquals("Correct chain length", testChain.length(), 2);
+        assertEquals("Correct chain getTileCount", testChain.getTileCount(), 2);
     }
 
     @Test
@@ -40,7 +42,11 @@ public class ChainTest {
 
         Chain result =  testChain1.merge(testChain2);
 
-        assertEquals("Correct chain length", result.length(), (testChain1.length() + testChain2.length()));
+        assertEquals("Correct chain getTileCount", result.getTileCount(), (testChain1.getTileCount() + testChain2.getTileCount()));
+
+        assertEquals("should be a member of this chain", result, testTile1.getChain());
+        assertEquals("should be a member of this chain", result, testTile2.getChain());
+
     }
     
     @Test
@@ -63,8 +69,8 @@ public class ChainTest {
     public void chainOwnerShip() {
     	Chain testChain = new Chain();
     	
-    	testChain.setOwner(Corporation.UNINCORPORATED);
+    	testChain.setCorporation(Corporation.UNINCORPORATED);
     	
-    	assertEquals("Should be unincorporated",testChain.getOwner(),Corporation.UNINCORPORATED);
+    	assertEquals("Should be unincorporated",testChain.getCorporation(),Corporation.UNINCORPORATED);
     }
 }
