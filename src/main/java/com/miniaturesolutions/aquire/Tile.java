@@ -8,7 +8,7 @@ public class Tile {
     final private int column;
     final private int row;
     final private String tileName;
-    private Chain chain;
+    //private Chain chain;
 
     /**
      * Create a Tile... assume zero based index...    0,0 = 1A   1,0 = 1B , 0,1 = 2A
@@ -45,17 +45,17 @@ public class Tile {
      * Assign ownership of the chain - only to be called by Chain
      * @param chain
      */
-    protected void setChain(Chain chain) {
-        this.chain = chain;
-    }
+ //   protected void setChain(Chain chain) {
+ //       this.chain = chain;
+ //   }
 
     /**
      * What chain does this tile belong to?
      * @return   chain or null
      */
-    public Chain getChain() {
-        return chain;
-    }
+//    public Chain getChain() {
+//        return chain;
+//    }
 
     /**
      *  The nice representation of the Tile position...

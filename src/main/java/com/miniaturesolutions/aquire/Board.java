@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Board {
-    private Map<Corporation,Chain> corporationChainMap = new HashMap<>();
+
     private List<Tile> availableTiles = new ArrayList<>();
     private Map<String,Tile> placedTiles = new HashMap<>();
 
@@ -15,12 +16,6 @@ public class Board {
      */
 	public Board() {
         buildAvailableTiles();
-        for(Corporation corp : Corporation.values()) {
-            if (corp != Corporation.UNINCORPORATED) {
-                Chain chain = new Chain();
-                corporationChainMap.put(corp,chain);
-            }
-        }
 	}
 
     /**
@@ -31,15 +26,6 @@ public class Board {
 		return availableTiles;
 	}
 
-    /**
-     *  Find the active chain for the corporation
-     *
-     * @param corporation
-     * @return Chain, will return a empty chain if no active chain
-     */
-    public Chain getChain(Corporation corporation) {
-        return corporationChainMap.get(corporation);
-    }
 
     private void buildAvailableTiles() {
         for (int column = 0; column < 9; column ++) {
@@ -75,47 +61,17 @@ public class Board {
     }
 
     /**
-     * Will placing this tile cause a merge... checks adjacent squares but not diagonals...
-     * @param tile
+     * Get mutable array representing the game state...
      * @return
      */
-    public boolean willTileCauseMerge(Tile tile) {
-    	return  checkIfTileExists(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow()) ||
-    			checkIfTileExists(tile.getColumn() < 9,  tile.getColumn()+1, tile.getRow()) ||
-    			checkIfTileExists(tile.getRow()    > 0,  tile.getColumn(),   tile.getRow()-1) ||
-    			checkIfTileExists(tile.getRow()    < 10, tile.getColumn(),   tile.getRow()+1);
-    }
-
-    /**
-     *  Which of the 2 Chains is the winner in a merger?
-     * @param chain1
-     * @param chain2
-     * @return winner or null if a tie
-     */
-	public Chain whoWinsMerge(Chain chain1, Chain chain2) {
-		Chain winner = null; // if no clear winner then we need to make a choice, just return null for now
-
-		if (chain1.getCorporation() == Corporation.UNINCORPORATED) {
-			winner = chain2;
-		}
-		if (chain2.getCorporation() == Corporation.UNINCORPORATED) {
-			winner = chain1;
-		}
+	public Map<Tile, Corporations> getState() {
+		Map<Tile, Corporations> state = new HashMap<>();
 		
-		if (chain1.getTileCount() > chain2.getTileCount()) {
-			winner = chain1;
-		} else if (chain2.getTileCount() > chain1.getTileCount()) {
-			winner = chain2;
+		for(Entry<String,Tile> tileName: placedTiles.entrySet()) {
+			Tile tile = tileName.getValue();
+			state.put(tile, Corporations.UNINCORPORATED);
 		}
-
-		return winner;
+		return state;
 	}
 
-    private boolean checkIfTileExists(boolean condition, int column, int row) {
-        boolean tilePresent = false;
-        if (condition) {
-            tilePresent = isTilePlaced(Tile.getTileName(column, row));              
-        }
-        return tilePresent;
-    }
 }

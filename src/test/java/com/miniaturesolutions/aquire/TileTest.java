@@ -69,7 +69,7 @@ public class TileTest {
         assertTrue("Correct Tile Name", tileName.equalsIgnoreCase("12I"));
      }
 
-    @Test
+  /*  @Test
     public void testChainMembership() {
         Tile testTile = new Tile(0,0);
         Chain chain = new Chain();
@@ -79,5 +79,5 @@ public class TileTest {
         testTile.setChain(chain);
 
         assertEquals("should be a member of this chain", chain, testTile.getChain());
-    }
+    }*/
 }

@@ -4,3 +4,41 @@ When merge, shareholders get bonuses...
 
 Need to be able to merge multiple corporations
 * need to order mergers ... comparable?
+
+
+Need to have strategies...
+	each player will have a  strategy
+		it decides on how to play the game
+		
+	Can register new strategies..
+		these will be untrusted
+		these will need to get board state/tiles...
+		need to provide unmutable or copies of he state...
+		
+		List of Tiles they have
+		List of Corporations and their current state
+			current stock price and no of available shares
+			active?
+		Representation of board
+			need to be able to determine if playing a tile will cause a merger
+				who will win merger?
+		Ability to place a tile, 
+			if a merger will be created and their is a tie, who will win?	
+			Will a new corporation be formed? 
+				are there any left?
+				which one to use?
+
+		What if?
+			can check outcome of placing a tile?
+				CORPORATION_FORMATION			-> list of available corporations
+				CORPORATION_MERGER				-> ????Winner / Loser
+				CORPORATION_MERGER_UNRESOLVED	-> ??? List of Corporations to choose between... winners / losers
+				CORPORATION_GOWTH				-> list with one corporation Who grows
+				NO_ACTION						-> empty list
+				ILLEGAL							-> empty list No Available corporations
+Board 
+	which tiles have been placed
+		are they part of a corporation?
+		
+		
+			
