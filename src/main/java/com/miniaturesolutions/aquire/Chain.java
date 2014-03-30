@@ -48,13 +48,6 @@ public class Chain {
         return mergedChain;
     }
 
-    /**
-     * Safe if size is 11 or more
-     * @return
-     */
-	public boolean safe() {
-		return (getTileCount() > 10);
-	}
 
 	/**
 	 * Set the chains owning corporation
@@ -71,8 +64,6 @@ public class Chain {
 	public Corporations getCorporation() {
 		return owner;
 	}
-
-
 
     protected void addAllTiles(Chain chain) {
         for(Tile tile: chain.tiles) {

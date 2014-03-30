@@ -24,6 +24,31 @@ final private int totalNoOfShares;
 		this.totalNoOfShares = totalNoOfShares;
 	}
 	
+	/**
+	 *  What tier is associated with the Corporation
+	 * @return
+	 */
+	public Tier getTier() {
+		return this.tier;
+	}
+
+	/** 
+	 * How many shares are available
+	 * @return
+	 */
+	public int getTotalShareCount() {
+		return totalNoOfShares;
+	}
+	
+	/**
+	 * Used to indicate if the Corporation is active or defunct
+	 */
+	
+	public enum Status {
+		DORMANT,
+		ACTIVE,
+		DEFUNCT
+	}
 	/** 
 	 * Used to drive the corporations stock valuations
 	 * @author rob
@@ -78,21 +103,4 @@ final private int totalNoOfShares;
 			return new ShareHolderBonus(majority,minority);
 		}
 	}
-
-	/**
-	 *  What tier is associated with the Corporation
-	 * @return
-	 */
-	public Tier getTier() {
-		return this.tier;
-	}
-
-	/** 
-	 * How many shares are available
-	 * @return
-	 */
-	public int getTotalShareCount() {
-		return totalNoOfShares;
-	}
-
 }

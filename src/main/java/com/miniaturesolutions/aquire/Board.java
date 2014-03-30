@@ -46,6 +46,9 @@ public class Board {
 
     /**
      * Simplistic place tile on board... no merging issues/legailty addressed
+     * 
+     * will manage this via a callback ... dont call me... i'll call you! 
+     * the player strategy will return the tile it wishes to place. 
      * @param tile
      */
     public void placeTile(Tile tile) {
@@ -69,7 +72,8 @@ public class Board {
 		
 		for(Entry<String,Tile> tileName: placedTiles.entrySet()) {
 			Tile tile = tileName.getValue();
-			state.put(tile, Corporations.UNINCORPORATED);
+			//TODO need to be able to map tiles to the corporation they belong to
+			state.put(tile, Corporations.UNINCORPORATED); 
 		}
 		return state;
 	}

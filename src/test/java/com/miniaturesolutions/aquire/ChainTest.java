@@ -50,22 +50,6 @@ public class ChainTest {
     }
     
     @Test
-    public void safeChain() {
-    	Chain testChain = new Chain();
-        Tile testTile1 = new Tile(0,0);    	
-    	assertFalse("Should not be safe", testChain.safe());
-    	
-    	for(int x=1; x < 20; x++) {
-            testChain.addTile(testTile1); 
-    		if (x < 11) {
-    	       	assertFalse("Should not be safe", testChain.safe());    			
-    		} else {
-    	       	assertTrue("Should be safe if x >= 11", testChain.safe());
-    		} 		
-    	}
-    }
-    
-    @Test
     public void chainOwnerShip() {
     	Chain testChain = new Chain();
     	
