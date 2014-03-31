@@ -8,7 +8,7 @@ Corporations have shareholders
 Need to be able to merge multiple corporations
 * need to order mergers ... comparable?
 
-
+Need to map tiles to actual corporations, not just the enums...
 
 
 Need to have strategies...
