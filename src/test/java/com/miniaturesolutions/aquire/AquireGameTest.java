@@ -52,7 +52,11 @@ public class AquireGameTest {
 
 		assertEquals("Should have correct value for the shares",
 				corp.getCurrentStockPrice(),
-				quote.getAvailableShares());		
+				quote.getStockPrice());
+
+        assertEquals("Should have correctcorporation",
+                corp.getCorporation(),
+                quote.getCorporation());
 
 	}
 

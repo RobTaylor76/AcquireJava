@@ -45,7 +45,7 @@ public class AquireGame {
 		for(Entry<Corporations,Corporation> entry : corporationMap.entrySet()) {
 			Corporation corp = entry.getValue();
 			if (corp.getStatus() == Status.ACTIVE) {
-				StockQuote quote = new StockQuote(corp.getRemainingShareCount());
+				StockQuote quote = new StockQuote(entry.getKey(), corp.getRemainingShareCount(),corp.getCurrentStockPrice());
 				stockMarket.put(entry.getKey(), quote);
 			}
 		}
