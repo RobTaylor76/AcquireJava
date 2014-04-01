@@ -69,5 +69,21 @@ public class Tile {
     public String toString() {
         return tileName;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (!(o instanceof Tile)) return false;
+    	Tile tile = (Tile)o;
+    	return tile.tileName.equalsIgnoreCase(this.tileName);
+    }
+    
+    @Override
+    public int hashCode() {
+    	int result = 17;
+    	result = 31 * result + row;
+    	result = 31 * result + column;
+    	return result;
+    }
+    
 
 }
