@@ -2,7 +2,7 @@ package com.miniaturesolutions.aquire;
 
 import com.miniaturesolutions.aquire.Corporations.Status;
 
-public class Corporation {
+public class CorporationImpl {
 
 	private int availableShares;
 	private Chain chain = new Chain();
@@ -10,9 +10,9 @@ public class Corporation {
 	final private Corporations corporation;
 	/** 
 	 * Creates a corporation based on the defined corporations
-	 * @param unincorporated
+	 * @param corporation
 	 */
-	public Corporation(Corporations corporation) {
+	public CorporationImpl(Corporations corporation) {
 		this.corporation = corporation;
 		this.availableShares = corporation.getTotalShareCount();
 	}

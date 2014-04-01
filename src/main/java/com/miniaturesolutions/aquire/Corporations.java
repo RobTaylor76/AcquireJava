@@ -25,7 +25,7 @@ final private int totalNoOfShares;
 	}
 	
 	/**
-	 *  What tier is associated with the Corporation
+	 *  What tier is associated with the CorporationImpl
 	 * @return
 	 */
 	public Tier getTier() {
@@ -41,7 +41,7 @@ final private int totalNoOfShares;
 	}
 	
 	/**
-	 * Used to indicate if the Corporation is active or defunct
+	 * Used to indicate if the CorporationImpl is active or defunct
 	 */
 	
 	public enum Status {

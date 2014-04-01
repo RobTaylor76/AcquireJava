@@ -22,7 +22,7 @@ public class AquireGameTest {
 	@Test
 	public void getCorporations() {
 		for (Corporations def: Corporations.values()) {
-			Corporation corp = game.getCorporation(def);
+			CorporationImpl corp = game.getCorporation(def);
 			assertNotNull("should exist", corp);
 		}
 	}
@@ -37,7 +37,7 @@ public class AquireGameTest {
 		assertEquals("Should be empty market",0,stockMarket.size());
 
 		//need to create a corporation that is active...
-		Corporation corp = game.getCorporation(Corporations.AMERICAN);
+		CorporationImpl corp = game.getCorporation(Corporations.AMERICAN);
 		corp.setStatus(Status.ACTIVE);
 
 		stockMarket = game.getStockMarket();
@@ -63,14 +63,17 @@ public class AquireGameTest {
 	@Test 
 	public void resolveMerges() {
 
-		Corporation corp1 = new Corporation(Corporations.UNINCORPORATED);
-		Corporation corp2 = new Corporation(Corporations.AMERICAN);
+		CorporationImpl corp1 = new CorporationImpl(Corporations.UNINCORPORATED);
+		CorporationImpl corp2 = new CorporationImpl(Corporations.AMERICAN);
 
 
-		Corporation winner = game.whoWinsMerge(corp1,corp2);    	
+		CorporationImpl winner = game.whoWinsMerge(corp1,corp2);
 		assertEquals("AMERICAN should win", corp2, winner);
 
-		corp1 = new Corporation(Corporations.SACKSON);
+        winner = game.whoWinsMerge(corp2,corp1);
+        assertEquals("AMERICAN should win", corp2, winner);
+
+		corp1 = new CorporationImpl(Corporations.SACKSON);
 
 		//chain with most tiles wins
 		for(int i=0; i<3; i++) {
@@ -83,9 +86,13 @@ public class AquireGameTest {
 
 		corp1.addTile(new Tile(4,0));
 		winner = game.whoWinsMerge(corp1,corp2);      	
-		assertEquals("SACKSON should win", corp1, winner);   	
+		assertEquals("SACKSON should win", corp1, winner);
 
-	}
+        winner = game.whoWinsMerge(corp2,corp1);
+        assertEquals("SACKSON should win", corp1, winner);
+
+
+    }
 
 	@Test
 	public void willTileCauseMerge() {

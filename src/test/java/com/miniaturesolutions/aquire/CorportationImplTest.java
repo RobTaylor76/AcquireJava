@@ -6,13 +6,13 @@ import org.junit.Test;
 
 import com.miniaturesolutions.aquire.Corporations.Tier;
 
-public class CorportationTest {
+public class CorportationImplTest {
 
 	@Test
 	public void createCorporation() {
 		
 		for(Corporations def : Corporations.values()) {
-			Corporation newCorp = new Corporation(def);
+			CorporationImpl newCorp = new CorporationImpl(def);
 			assertEquals("Should have correct number of shares", def.getTotalShareCount(), 
 																	newCorp.getRemainingShareCount());
 		}		
@@ -20,7 +20,7 @@ public class CorportationTest {
 	
 	@Test
 	public void testSharePrice() {
-		Corporation corp = new Corporation(Corporations.AMERICAN);
+		CorporationImpl corp = new CorporationImpl(Corporations.AMERICAN);
 		Chain corpChain = corp.getChain();
 	
 		Tier corpTier = Corporations.AMERICAN.getTier();
@@ -32,7 +32,7 @@ public class CorportationTest {
 	
     @Test
     public void safeCorporation() {
-		Corporation corp = new Corporation(Corporations.AMERICAN);
+		CorporationImpl corp = new CorporationImpl(Corporations.AMERICAN);
 
         Tile testTile1 = new Tile(0,0);    	
     	assertFalse("Should not be safe", corp.isSafe());

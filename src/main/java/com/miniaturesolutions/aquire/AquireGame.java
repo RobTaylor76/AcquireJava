@@ -14,7 +14,7 @@ import com.miniaturesolutions.aquire.Corporations.Status;
 public class AquireGame {
 
 	final private Board board;
-    final private Map<Corporations,Corporation> corporationMap = new HashMap<>();
+    final private Map<Corporations,CorporationImpl> corporationMap = new HashMap<>();
     
 	/**
 	 * 
@@ -22,18 +22,18 @@ public class AquireGame {
 	public AquireGame() {
 		board = new Board();
         for(Corporations def : Corporations.values()) {
-        	Corporation corp = new Corporation(def);
+        	CorporationImpl corp = new CorporationImpl(def);
             corporationMap.put(def,corp);
         }
 	}
 	
 	/**
-	 * Get the Corporation based on it's definition...
+	 * Get the CorporationImpl based on it's definition...
 	 * Limits the list the enum
 	 * @param def
 	 * @return
 	 */
-	public Corporation getCorporation(Corporations def) {
+	public CorporationImpl getCorporation(Corporations def) {
 		// TODO Auto-generated method stub
 		return corporationMap.get(def);
 	}
@@ -42,8 +42,8 @@ public class AquireGame {
 		// TODO Auto-generated method stub
 		Map<Corporations, StockQuote> stockMarket = new HashMap<>();
 		
-		for(Entry<Corporations,Corporation> entry : corporationMap.entrySet()) {
-			Corporation corp = entry.getValue();
+		for(Entry<Corporations,CorporationImpl> entry : corporationMap.entrySet()) {
+			CorporationImpl corp = entry.getValue();
 			if (corp.getStatus() == Status.ACTIVE) {
 				StockQuote quote = new StockQuote(entry.getKey(), corp.getRemainingShareCount(),corp.getCurrentStockPrice());
 				stockMarket.put(entry.getKey(), quote);
@@ -78,8 +78,8 @@ public class AquireGame {
 	 * @param corp2
 	 * @return winner or null if a tie
 	 */
-    public Corporation whoWinsMerge(Corporation corp1, Corporation corp2) {
-		Corporation winner = null; // if no clear winner then we need to make a choice, just return null for now
+    public CorporationImpl whoWinsMerge(CorporationImpl corp1, CorporationImpl corp2) {
+		CorporationImpl winner = null; // if no clear winner then we need to make a choice, just return null for now
 
 		if (corp1.getCorporation() == Corporations.UNINCORPORATED) {
 			winner = corp2;
