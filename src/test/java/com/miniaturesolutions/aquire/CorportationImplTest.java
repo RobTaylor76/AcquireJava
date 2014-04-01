@@ -4,14 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.miniaturesolutions.aquire.Corporations.Tier;
+import com.miniaturesolutions.aquire.Corporation.Tier;
 
 public class CorportationImplTest {
 
 	@Test
 	public void createCorporation() {
 		
-		for(Corporations def : Corporations.values()) {
+		for(Corporation def : Corporation.values()) {
 			CorporationImpl newCorp = new CorporationImpl(def);
 			assertEquals("Should have correct number of shares", def.getTotalShareCount(), 
 																	newCorp.getRemainingShareCount());
@@ -20,10 +20,10 @@ public class CorportationImplTest {
 	
 	@Test
 	public void testSharePrice() {
-		CorporationImpl corp = new CorporationImpl(Corporations.AMERICAN);
+		CorporationImpl corp = new CorporationImpl(Corporation.AMERICAN);
 		Chain corpChain = corp.getChain();
 	
-		Tier corpTier = Corporations.AMERICAN.getTier();
+		Tier corpTier = Corporation.AMERICAN.getTier();
 		
 		int expectedPrice = corpTier.getSharePrice(corpChain.getTileCount());
 		
@@ -32,7 +32,7 @@ public class CorportationImplTest {
 	
     @Test
     public void safeCorporation() {
-		CorporationImpl corp = new CorporationImpl(Corporations.AMERICAN);
+		CorporationImpl corp = new CorporationImpl(Corporation.AMERICAN);
 
         Tile testTile1 = new Tile(0,0);    	
     	assertFalse("Should not be safe", corp.isSafe());

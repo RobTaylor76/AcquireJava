@@ -6,20 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.miniaturesolutions.aquire.Corporations.Status;
+import com.miniaturesolutions.aquire.Corporation.Status;
 
 public class Adviser {
 
 	final private Board board;
-	final private Map<Corporations, CorporationImpl> corporationMap;
+	final private Map<Corporation, CorporationImpl> corporationMap;
 	
 	/**
 	 * A adviser for the Game... can hand to clients as readonly object for querying
      * @param corporationMap
      */
 
-	  public Adviser(Board board, Map<Corporations, CorporationImpl> corporationMap) {
-
+	  public Adviser(Board board, Map<Corporation, CorporationImpl> corporationMap) {
 			this.board = board;
 			this.corporationMap = corporationMap;
 	}
@@ -48,18 +47,35 @@ public class Adviser {
      * Get the current stock market condition... Active corporations only
      * @return
      */
-	public Map<Corporations, StockQuote> getStockMarket() {
+	public Map<Corporation, StockQuote> getStockMarket() {
 		// TODO Auto-generated method stub
-		Map<Corporations, StockQuote> stockMarket = new HashMap<>();
+		Map<Corporation, StockQuote> stockMarket = new HashMap<>();
 		
-		for(Entry<Corporations, CorporationImpl> entry : corporationMap.entrySet()) {
+		for(Entry<Corporation, CorporationImpl> entry : corporationMap.entrySet()) {
             CorporationImpl corp = entry.getValue();
 			if (corp.getStatus() == Status.ACTIVE) {
-                StockQuote quote = new StockQuote(entry.getKey(), corp.getRemainingShareCount(),corp.getCurrentStockPrice());
+                StockQuote quote = new StockQuote(corp);
                 stockMarket.put(entry.getKey(), quote);
 			}
 		}		
 		return stockMarket;
 	}
 
+	/**
+	 * List the available corporations... the ones that aren't active
+	 * 
+	 * @return List of stock market quotes for the available corporations
+	 */
+	public List<StockQuote> availableCorporations() {
+		List<StockQuote> availableCorporations = new LinkedList<>();
+		
+		for(Entry<Corporation, CorporationImpl> entry : corporationMap.entrySet()) {
+            CorporationImpl corp = entry.getValue();
+			if ((corp.getStatus() != Status.ACTIVE) && (corp.getCorporation() != Corporation.UNINCORPORATED)) {
+                StockQuote quote = new StockQuote(corp);
+                availableCorporations.add(quote);
+			}
+		}		
+		return availableCorporations;
+	}
 }

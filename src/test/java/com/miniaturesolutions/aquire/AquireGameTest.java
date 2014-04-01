@@ -2,13 +2,18 @@ package com.miniaturesolutions.aquire;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.mockito.Mockito.*;
+
 public class AquireGameTest {
 
 	private AquireGame game;
+	
 	@Before
 	public void doSetup() {
 		game = new AquireGame();
@@ -16,7 +21,7 @@ public class AquireGameTest {
 
 	@Test
 	public void getCorporations() {
-		for (Corporations def: Corporations.values()) {
+		for (Corporation def: Corporation.values()) {
 			CorporationImpl corp = game.getCorporation(def);
 			assertNotNull("should exist", corp);
 		}
@@ -33,8 +38,8 @@ public class AquireGameTest {
 	@Test 
 	public void resolveMerges() {
 
-		CorporationImpl corp1 = new CorporationImpl(Corporations.UNINCORPORATED);
-		CorporationImpl corp2 = new CorporationImpl(Corporations.AMERICAN);
+		CorporationImpl corp1 = new CorporationImpl(Corporation.UNINCORPORATED);
+		CorporationImpl corp2 = new CorporationImpl(Corporation.AMERICAN);
 
 
 		CorporationImpl winner = game.whoWinsMerge(corp1,corp2);
@@ -43,7 +48,7 @@ public class AquireGameTest {
         winner = game.whoWinsMerge(corp2,corp1);
         assertEquals("AMERICAN should win", corp2, winner);
 
-		corp1 = new CorporationImpl(Corporations.SACKSON);
+		corp1 = new CorporationImpl(Corporation.SACKSON);
 
 		//chain with most tiles wins
 		for(int i=0; i<3; i++) {
@@ -61,5 +66,35 @@ public class AquireGameTest {
         winner = game.whoWinsMerge(corp2,corp1);
         assertEquals("SACKSON should win", corp1, winner);
     }
+	
+	@Test
+	public void playerPlacesTile() {
+		
+		Board board = new Board();
+		board.placeTile(new Tile(1,0));
+		board.placeTile(new Tile(0,1));
+
+		AquireGame game = new AquireGame(board);
+		Adviser adviser = game.getAdviser();
+		
+		PlayerStrategy player = mock(PlayerStrategy.class);
+		
+		game.addPlayer(player);
+		
+		
+		Tile tileToPlace = new Tile(0,0);
+		
+		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
+		
+		List<Tile> tiles = new LinkedList<>();
+
+		
+		List<StockQuote> formationChoices = adviser.availableCorporations();
+		
+		game.playGame();
+		verify(player).placeTile(any(List.class));
+		verify(player).selectCorporationToForm(eq(formationChoices));
+		
+	}
 
 }

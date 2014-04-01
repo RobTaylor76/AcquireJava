@@ -4,31 +4,31 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.miniaturesolutions.aquire.Corporations.Tier;
+import com.miniaturesolutions.aquire.Corporation.Tier;
 
-public class CorporationsTest {
+public class CorporationTest {
 	
 	@Test
 	public void tieredCorporations() {
-		Corporations corp = Corporations.UNINCORPORATED;
+		Corporation corp = Corporation.UNINCORPORATED;
 		Tier tier = corp.getTier();	
 		assertEquals("should be none", tier, Tier.NONE);
 		
-		corp = Corporations.WORLDWIDE;
+		corp = Corporation.WORLDWIDE;
 		assertEquals("should be BRONZE", Tier.BRONZE, corp.getTier());
-		corp = Corporations.SACKSON;		
+		corp = Corporation.SACKSON;		
 		assertEquals("should be BRONZE", Tier.BRONZE, corp.getTier());
 		
-		corp = Corporations.FESTIVAL;		
+		corp = Corporation.FESTIVAL;		
 		assertEquals("should be SILVER", Tier.SILVER, corp.getTier());
-		corp = Corporations.IMPERIAL;
+		corp = Corporation.IMPERIAL;
 		assertEquals("should be SILVER", Tier.SILVER, corp.getTier());
-		corp = Corporations.AMERICAN;
+		corp = Corporation.AMERICAN;
 		assertEquals("should be SILVER",  Tier.SILVER, corp.getTier());
 		
-		corp = Corporations.CONTINENTAL;
+		corp = Corporation.CONTINENTAL;
 		assertEquals("should be GOLD",  Tier.GOLD, corp.getTier());
-		corp = Corporations.TOWER;
+		corp = Corporation.TOWER;
 		assertEquals("should be GOLD",  Tier.GOLD, corp.getTier());
 	}
 	
@@ -36,9 +36,9 @@ public class CorporationsTest {
 	@Test
 	public void availableShares() {
 		
-		for(Corporations corp: Corporations.values()) {
+		for(Corporation corp: Corporation.values()) {
 			int totalShares = corp.getTotalShareCount();
-			if (corp == Corporations.UNINCORPORATED) {
+			if (corp == Corporation.UNINCORPORATED) {
 				assertEquals("Should have no shares", 0, totalShares);	
 			} else {
 				assertEquals("Should have 25 shares", 25, totalShares);				

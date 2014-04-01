@@ -5,7 +5,7 @@ package com.miniaturesolutions.aquire;
  * @author rob
  *
  */
-public enum Corporations {
+public enum Corporation {
 	UNINCORPORATED(Tier.NONE, 0),
 	WORLDWIDE(Tier.BRONZE, 25), 
 	SACKSON(Tier.BRONZE, 25), 
@@ -19,7 +19,7 @@ public enum Corporations {
 final private Tier tier;
 final private int totalNoOfShares;
 	
-	Corporations(Tier tier, int totalNoOfShares) {
+	Corporation(Tier tier, int totalNoOfShares) {
 		this.tier = tier;
 		this.totalNoOfShares = totalNoOfShares;
 	}

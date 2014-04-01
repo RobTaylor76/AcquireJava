@@ -1,18 +1,18 @@
 package com.miniaturesolutions.aquire;
 
-import com.miniaturesolutions.aquire.Corporations.Status;
+import com.miniaturesolutions.aquire.Corporation.Status;
 
 public class CorporationImpl {
 
 	private int availableShares;
 	private Chain chain = new Chain();
 	private Status status;
-	final private Corporations corporation;
+	final private Corporation corporation;
 	/** 
 	 * Creates a corporation based on the defined corporations
 	 * @param corporation
 	 */
-	public CorporationImpl(Corporations corporation) {
+	public CorporationImpl(Corporation corporation) {
 		this.corporation = corporation;
 		this.availableShares = corporation.getTotalShareCount();
 	}
@@ -77,7 +77,7 @@ public class CorporationImpl {
 	 * What corporation does this represent?
 	 * @return
 	 */
-	public Corporations getCorporation() {
+	public Corporation getCorporation() {
 		return corporation;
 	}
 }

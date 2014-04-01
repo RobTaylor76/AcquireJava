@@ -17,7 +17,7 @@ public class Chain {
      */
     private List<Tile> tiles = new LinkedList<>();
     
-    private Corporations owner;
+    private Corporation owner;
 
     /**
      * Takes ownership of tile
@@ -53,7 +53,7 @@ public class Chain {
 	 * Set the chains owning corporation
 	 * @param owner
 	 */
-	public void setCorporation(Corporations owner) {
+	public void setCorporation(Corporation owner) {
 		this.owner = owner;
 	}
 	
@@ -61,7 +61,7 @@ public class Chain {
 	 * Who owns the chain
 	 * @return
 	 */
-	public Corporations getCorporation() {
+	public Corporation getCorporation() {
 		return owner;
 	}
 

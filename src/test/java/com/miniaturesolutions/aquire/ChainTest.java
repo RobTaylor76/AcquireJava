@@ -53,8 +53,8 @@ public class ChainTest {
     public void chainOwnerShip() {
     	Chain testChain = new Chain();
     	
-    	testChain.setCorporation(Corporations.UNINCORPORATED);
+    	testChain.setCorporation(Corporation.UNINCORPORATED);
     	
-    	assertEquals("Should be unincorporated",testChain.getCorporation(),Corporations.UNINCORPORATED);
+    	assertEquals("Should be unincorporated",testChain.getCorporation(),Corporation.UNINCORPORATED);
     }
 }

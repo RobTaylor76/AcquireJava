@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 public class Board {
 
     private List<Tile> availableTiles = new ArrayList<>();
-    private Map<String,Entry<Tile,Corporations>> placedTiles = new HashMap<>();
+    private Map<String,Entry<Tile,Corporation>> placedTiles = new HashMap<>();
 
     /**
      * Create a new game board
@@ -55,14 +55,14 @@ public class Board {
      */
     public void placeTile(Tile tile) {
         placedTiles.put(tile.toString(), 
-        		new AbstractMap.SimpleEntry<>(tile,Corporations.UNINCORPORATED));
+        		new AbstractMap.SimpleEntry<>(tile,Corporation.UNINCORPORATED));
     }
 
     /**
      * Get the tile from the board
      * @param tileName
      */
-    public Entry<Tile, Corporations> getTile(String tileName){
+    public Entry<Tile, Corporation> getTile(String tileName){
         return placedTiles.get(tileName);
     }
 
@@ -70,18 +70,23 @@ public class Board {
      * Get mutable array representing the game state...
      * @return
      */
-	public Map<Tile, Corporations> getState() {
-		Map<Tile, Corporations> state = new HashMap<>();
+	public Map<Tile, Corporation> getState() {
+		Map<Tile, Corporation> state = new HashMap<>();
 		
 		for(String key: placedTiles.keySet()) {
-			Entry<Tile,Corporations> placedTile = placedTiles.get(key);
+			Entry<Tile,Corporation> placedTile = placedTiles.get(key);
 			state.put(placedTile.getKey(), placedTile.getValue()); 
 		}
 		return state;
 	}
 
-	public List<Entry<Tile, Corporations>> getMergerTiles(Tile tile) {
-		List<Entry<Tile,Corporations>> list = new LinkedList<>();
+	/**
+	 *  Get the tiles that would be involved in a merge by placing the tile
+	 * @param tile
+	 * @return A List of tiles and the corporation they belong to
+	 */
+	public List<Entry<Tile, Corporation>> getAffectedMergerTiles(Tile tile) {
+		List<Entry<Tile,Corporation>> list = new LinkedList<>();
 
 		addTileToList(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow(),		list); 
 		addTileToList(tile.getColumn() < 9,  tile.getColumn()+1, tile.getRow(),		list); 
@@ -100,9 +105,9 @@ public class Board {
 	 * @param list
 	 */
 	private void addTileToList(boolean condition, int column, int row, 
-													List<Entry<Tile,Corporations>> list) {
+													List<Entry<Tile,Corporation>> list) {
         if (condition) {
-        	Entry<Tile,Corporations> tile = getTile(Tile.getTileName(column, row));
+        	Entry<Tile,Corporation> tile = getTile(Tile.getTileName(column, row));
         	if (tile != null) {
         		list.add(tile);
         	}

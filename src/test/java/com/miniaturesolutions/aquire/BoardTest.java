@@ -43,7 +43,7 @@ public class BoardTest {
         assertTrue("tile on board ", board.isTilePlaced(testTile1.displayedAs()));
         assertTrue("tile on board ", board.isTilePlaced(testTile2.displayedAs()));
         
-        Entry<Tile,Corporations> placedTile;
+        Entry<Tile,Corporation> placedTile;
         
         placedTile =  board.getTile("XX");
         assertNull("tile doesnt exist ", placedTile);
@@ -51,7 +51,7 @@ public class BoardTest {
         placedTile =  board.getTile(testTile1.displayedAs());
 
         assertEquals("tile matches ", testTile1, placedTile.getKey());
-        assertEquals("corporation matches ", Corporations.UNINCORPORATED, placedTile.getValue());
+        assertEquals("corporation matches ", Corporation.UNINCORPORATED, placedTile.getValue());
 
         placedTile =  board.getTile(testTile2.displayedAs());
         
@@ -70,10 +70,10 @@ public class BoardTest {
         board.placeTile(testTile2);
 
         
-    	Map<Tile,Corporations> state = board.getState();
+    	Map<Tile,Corporation> state = board.getState();
 
-    	assertEquals("unincorpoarted tiles", Corporations.UNINCORPORATED,state.get(testTile1));
-    	assertEquals("unincorpoarted tiles", Corporations.UNINCORPORATED,state.get(testTile2));
+    	assertEquals("unincorpoarted tiles", Corporation.UNINCORPORATED,state.get(testTile1));
+    	assertEquals("unincorpoarted tiles", Corporation.UNINCORPORATED,state.get(testTile2));
     	assertNull("not on board!!!",state.get(testTile3)); 	
     }
     
@@ -86,11 +86,11 @@ public class BoardTest {
 		board.placeTile(new Tile(8,10));
 		board.placeTile(new Tile(7,11));  
 		
-    	List<Entry<Tile,Corporations>> tileList = board.getMergerTiles(new Tile(0,0));
+    	List<Entry<Tile,Corporation>> tileList = board.getAffectedMergerTiles(new Tile(0,0));
     	assertEquals("should have 2 tiles", 2, tileList.size());
     	
     	Set<Tile> tiles = new HashSet<>();
-    	for(Entry<Tile,Corporations> entry :tileList) {
+    	for(Entry<Tile,Corporation> entry :tileList) {
     		tiles.add(entry.getKey());		
     	}
     	assertTrue("Contains the correct tile", tiles.contains(new Tile(1,0)));
