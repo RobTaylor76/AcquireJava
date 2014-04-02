@@ -71,10 +71,10 @@ public class Adviser {
 		
 		for(Entry<Corporation, CorporationImpl> entry : corporationMap.entrySet()) {
             CorporationImpl corp = entry.getValue();
-			if (corp.getStatus() != Status.ACTIVE) {
+	//		if (corp.getStatus() != Status.ACTIVE) {
                 StockQuote quote = new StockQuote(corp);
                 availableCorporations.add(quote);
-			}
+	//		}
 		}		
 		return availableCorporations;
 	}
