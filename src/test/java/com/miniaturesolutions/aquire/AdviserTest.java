@@ -52,6 +52,11 @@ public class AdviserTest {
         assertEquals("Should have correct corporation",
                 corp.getCorporation(),
                 quote.getCorporation());
+
+
+        assertEquals("Should have correct no of avail shares",
+                corp.getRemainingShareCount(),
+                quote.getAvailableShares());
         
         assertEquals("Should have correct tile count",
                 corp.getTileCount(),

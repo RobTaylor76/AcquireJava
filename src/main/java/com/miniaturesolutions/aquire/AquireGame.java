@@ -51,14 +51,6 @@ public class AquireGame {
 		return corporationMap.get(def);
 	}
 
-    /**
-     *  Put a tile in play
-     * @param tile
-     */
-	private void placeTile(Tile tile) {
-		board.placeTile(tile);
-	}
-
 	/**
 	 * Which of the 2 Corporations is the winner in a merger?
 	 * @param corp1
@@ -82,7 +74,7 @@ public class AquireGame {
 		}
 
 		return winner;
-	}
+	 }
     
     
     /**

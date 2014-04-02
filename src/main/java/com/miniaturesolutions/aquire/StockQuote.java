@@ -40,7 +40,7 @@ public class StockQuote {
 	public Object getCorporationTileCount() {
 		return corporationTileCount;
 	}
-    
+
     @Override
     public boolean equals(Object o) {
     	if (!(o instanceof StockQuote)) return false;
@@ -50,7 +50,7 @@ public class StockQuote {
     			(quote.stockPrice == this.stockPrice);
     											
     }
-    
+   /*
     @Override
     public int hashCode() {
     	int result = 17;
@@ -59,5 +59,5 @@ public class StockQuote {
        	result = 31 * result + stockPrice;
     	return result;
     }
-
+    */
 }
