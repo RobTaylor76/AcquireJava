@@ -22,36 +22,16 @@ public class AquireGame {
     
 	/**
 	 * 
+	 * @param factory
 	 */
-	public AquireGame() {
-		this(new Board());
-	}
-	
-	/**
-	 * 
-	 * @param board
-	 */
-	public AquireGame(Board board) {
-		this.board = board;
-        for(Corporation def : Corporation.values()) {
-            if (def == Corporation.UNINCORPORATED) {
-                continue;
-            }
-        	CorporationImpl corp = new CorporationImpl(def);
-            corporationMap.put(def,corp);
+	public AquireGame(AquireFactory factory) {
+		this.board = factory.createBoard();
+		
+		List<CorporationImpl> corporations = factory.createCorporations();
+        for(CorporationImpl corp : corporations) {
+            corporationMap.put(corp.getCorporation(),corp);
         }
         adviser = new Adviser(board, corporationMap);	
-	}
-
-	/**
-	 * Get the CorporationImpl based on it's definition...
-	 * Limits the list the enum
-	 * @param def
-	 * @return
-	 */
-	public CorporationImpl getCorporation(Corporation def) {
-		// TODO Auto-generated method stub
-		return corporationMap.get(def);
 	}
 
 	/**

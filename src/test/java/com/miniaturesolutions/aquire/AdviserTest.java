@@ -21,13 +21,24 @@ public class AdviserTest {
 	
 	private AquireGame game;
 	private Adviser adviser;
+	private AquireFactory factory;
 	
+	@Before
+	public void setUp() {
+		factory = new TestAquireFactory();
+		game = new AquireGame(factory);
+		adviser = game.getAdviser();
+	}
 
 	@Test
 	public void getStockMarket() {
 
-		game = new AquireGame();
 		adviser = game.getAdviser();
+		
+		List<CorporationImpl> corporations = factory.createCorporations();
+		
+		CorporationImpl corp = corporations.get(0);
+		
 		
 		//no active corporations... no available corporations
 		//never show unincorporated
@@ -36,13 +47,12 @@ public class AdviserTest {
 		assertEquals("Should be empty market",0,stockMarket.size());
 
 		//need to create a corporation that is active...
-		CorporationImpl corp = game.getCorporation(Corporation.AMERICAN);
 		corp.setStatus(Status.ACTIVE);
 
 		stockMarket = adviser.getStockMarket();
 		assertEquals("Should 1 entry",1,stockMarket.size());
 
-		StockQuote quote = stockMarket.get(Corporation.AMERICAN);
+		StockQuote quote = stockMarket.get(corp.getCorporation());
 		assertNotNull("Should have a live quote",quote);
 
         assertEquals("Should have correct value for the shares",
@@ -62,24 +72,38 @@ public class AdviserTest {
                 corp.getTileCount(),
                 quote.getCorporationTileCount());
 
+		corp.setStatus(Status.DEFUNCT);
+		
+		stockMarket = adviser.getStockMarket();
+		assertEquals("Should be empty market",0,stockMarket.size());
+
+		corp.setStatus(Status.DORMANT);
+		
+		stockMarket = adviser.getStockMarket();
+		assertEquals("Should be empty market",0,stockMarket.size());
+
+	
 	}
 	
 	@Test
 	public void getAvailableCorporations() {
-		game = new AquireGame();
-		adviser = game.getAdviser();
+		List<CorporationImpl> corporations = factory.createCorporations();
+		
+		CorporationImpl corp = corporations.get(0);
+		corp.setStatus(Status.ACTIVE);
+				
 		List<StockQuote> availableCorporations = adviser.availableCorporations();
+		assertEquals("should only have 6 corporations as 1 is active", 6, availableCorporations.size());
 		
 		for(StockQuote quote: availableCorporations) {
-			assertFalse("dont list unincorporated", quote.getCorporation() == Corporation.UNINCORPORATED);
+			assertFalse("dont list the active corporation", quote.getCorporation() == corp.getCorporation());
 		}
 	}
 	
 	@Test
 	public void willTileCauseMerge() {
-		Board board = new Board();
-		game = new AquireGame(board);
-		adviser = game.getAdviser();
+		Board board = factory.createBoard();
+		
 		board.placeTile(new Tile(1,0));
 		board.placeTile(new Tile(0,1));
 

@@ -13,29 +13,18 @@ import static org.mockito.Mockito.*;
 public class AquireGameTest {
 
 	private AquireGame game;
+	private AquireFactory factory;
 	
 	@Before
 	public void doSetup() {
-		game = new AquireGame();
-	}
-
-	@Test
-	public void getCorporations() {
-		for (Corporation def: Corporation.values()) {
-			CorporationImpl corp = game.getCorporation(def);
-            if (def == Corporation.UNINCORPORATED) {
-                assertNull("should not exist", corp);
-            }  else {
-                assertNotNull("should exist", corp);
-            }
-		}
+		factory = new TestAquireFactory();
+		game = new AquireGame(factory);
 	}
 
 	@Test
 	public void getAdviser() {
 		Adviser adviser = game.getAdviser();
 		assertNotNull("should create an adviser", adviser);
-
 	}
 
 
@@ -74,11 +63,11 @@ public class AquireGameTest {
 	@Test
 	public void playerPlacesTile() {
 		
-		Board board = new Board();
+		Board board = factory.createBoard();
+		
 		board.placeTile(new Tile(1,0));
 		board.placeTile(new Tile(0,1));
 
-		AquireGame game = new AquireGame(board);
 		Adviser adviser = game.getAdviser();
 		
 		PlayerStrategy player = mock(PlayerStrategy.class);

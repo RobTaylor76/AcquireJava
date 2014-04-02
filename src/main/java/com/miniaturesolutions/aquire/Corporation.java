@@ -28,7 +28,7 @@ final private int totalNoOfShares;
 	 *  What tier is associated with the CorporationImpl
 	 * @return
 	 */
-	public Tier getTier() {
+	Tier getTier() {
 		return this.tier;
 	}
 
@@ -36,7 +36,7 @@ final private int totalNoOfShares;
 	 * How many shares are available
 	 * @return
 	 */
-	public int getTotalShareCount() {
+	int getTotalShareCount() {
 		return totalNoOfShares;
 	}
 	
@@ -44,7 +44,7 @@ final private int totalNoOfShares;
 	 * Used to indicate if the CorporationImpl is active or defunct
 	 */
 	
-	public enum Status {
+	enum Status {
 		DORMANT,
 		ACTIVE,
 		DEFUNCT
@@ -54,7 +54,7 @@ final private int totalNoOfShares;
 	 * @author rob
 	 *
 	 */
-	public enum Tier {
+	enum Tier {
 		NONE(0),
 		BRONZE(0),
 		SILVER(100),
@@ -72,7 +72,7 @@ final private int totalNoOfShares;
 		 * @param noOfTiles
 		 * @return the current share price
 		 */
-		public int  getSharePrice(int noOfTiles) {
+		int  getSharePrice(int noOfTiles) {
 			int price = 0;
 			if (noOfTiles < 7) {
 				price = noOfTiles * 100;
@@ -95,7 +95,7 @@ final private int totalNoOfShares;
 		 * @param noOfTiles
 		 * @return
 		 */
-		public ShareHolderBonus getShareHolderBonus(int noOfTiles) {
+		ShareHolderBonus getShareHolderBonus(int noOfTiles) {
 
 			int majority = getSharePrice(noOfTiles) * 10;
 			int minority = majority / 2;
