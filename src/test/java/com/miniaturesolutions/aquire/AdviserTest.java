@@ -101,6 +101,10 @@ public class AdviserTest {
 		noMerges.add(new Tile(0,3));
 		noMerges.add(new Tile(1,2));
 		noMerges.add(new Tile(2,1));
+        noMerges.add(new Tile(1,11));
+        noMerges.add(new Tile(8,1));
+        noMerges.add(new Tile(5,1));
+        noMerges.add(new Tile(5,0));
 
 		for(Tile tile: validMerges) {
 			assertTrue("should trigger merge " + tile.toString(), adviser.willTileCauseMerger(tile));

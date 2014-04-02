@@ -89,7 +89,7 @@ public class Board {
 		List<Entry<Tile,Corporation>> list = new LinkedList<>();
 
 		addTileToList(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow(),		list); 
-		addTileToList(tile.getColumn() < 9,  tile.getColumn()+1, tile.getRow(),		list); 
+		addTileToList(tile.getColumn() < 8,  tile.getColumn()+1, tile.getRow(),		list);
 		addTileToList(tile.getRow()    > 0,  tile.getColumn(),   tile.getRow()-1, 	list);
 		addTileToList(tile.getRow()    < 10, tile.getColumn(),   tile.getRow()+1,	list);
 		

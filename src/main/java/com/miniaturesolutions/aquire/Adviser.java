@@ -30,9 +30,9 @@ public class Adviser {
      */
     public boolean willTileCauseMerger(Tile tile) {
     	return  checkIfTileExists(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow()) ||
-    			checkIfTileExists(tile.getColumn() < 9,  tile.getColumn()+1, tile.getRow()) ||
+    			checkIfTileExists(tile.getColumn() < 8,  tile.getColumn()+1, tile.getRow()) ||
     			checkIfTileExists(tile.getRow()    > 0,  tile.getColumn(),   tile.getRow()-1) ||
-    			checkIfTileExists(tile.getRow()    < 10, tile.getColumn(),   tile.getRow()+1);
+    			checkIfTileExists(tile.getRow()    < 11, tile.getColumn(),   tile.getRow()+1);
     }
 
     private boolean checkIfTileExists(boolean condition, int column, int row) {
@@ -71,7 +71,7 @@ public class Adviser {
 		
 		for(Entry<Corporation, CorporationImpl> entry : corporationMap.entrySet()) {
             CorporationImpl corp = entry.getValue();
-			if ((corp.getStatus() != Status.ACTIVE) && (corp.getCorporation() != Corporation.UNINCORPORATED)) {
+			if (corp.getStatus() != Status.ACTIVE) {
                 StockQuote quote = new StockQuote(corp);
                 availableCorporations.add(quote);
 			}

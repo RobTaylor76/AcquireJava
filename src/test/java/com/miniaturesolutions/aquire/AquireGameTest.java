@@ -23,7 +23,11 @@ public class AquireGameTest {
 	public void getCorporations() {
 		for (Corporation def: Corporation.values()) {
 			CorporationImpl corp = game.getCorporation(def);
-			assertNotNull("should exist", corp);
+            if (def == Corporation.UNINCORPORATED) {
+                assertNull("should not exist", corp);
+            }  else {
+                assertNotNull("should exist", corp);
+            }
 		}
 	}
 

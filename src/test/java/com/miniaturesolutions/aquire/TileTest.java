@@ -2,9 +2,7 @@ package com.miniaturesolutions.aquire;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -69,6 +67,19 @@ public class TileTest {
         assertTrue("Correct Tile Name", tileName.equalsIgnoreCase("12I"));
      }
 
+    @Test
+    public void testEquality() {
+        Tile a = new Tile(1,0);
+        Tile b = new Tile(1,0);
+        Tile c = new Tile(0,0);
+        assertTrue("same tile", a.equals(b));
+        assertTrue("same tile", b.equals(a));
+
+        assertFalse("diferent tile", c.equals(a));
+        assertFalse("diferent tile", a.equals(c));
+
+        assertFalse("different object", a.equals(new Long(1)));
+    }
   /*  @Test
     public void testChainMembership() {
         Tile testTile = new Tile(0,0);

@@ -85,16 +85,34 @@ public class BoardTest {
 
 		board.placeTile(new Tile(8,10));
 		board.placeTile(new Tile(7,11));  
-		
-    	List<Entry<Tile,Corporation>> tileList = board.getAffectedMergerTiles(new Tile(0,0));
-    	assertEquals("should have 2 tiles", 2, tileList.size());
-    	
-    	Set<Tile> tiles = new HashSet<>();
-    	for(Entry<Tile,Corporation> entry :tileList) {
-    		tiles.add(entry.getKey());		
-    	}
-    	assertTrue("Contains the correct tile", tiles.contains(new Tile(1,0)));
-    	assertTrue("Contains the correct tile", tiles.contains(new Tile(0,1)));
-    	assertFalse("doesnt contain other tiles", tiles.contains(new Tile(8,10)));
+
+        List<Tile> testTiles = new LinkedList<>();
+        testTiles.add(new Tile(0,0)) ;
+        testTiles.add(new Tile(1,1)) ;
+
+        for(Tile tile :testTiles) {
+            List<Entry<Tile,Corporation>> tileList = board.getAffectedMergerTiles(tile);
+            assertEquals("should have 2 tiles", 2, tileList.size());
+
+            Set<Tile> tiles = new HashSet<>();
+            for(Entry<Tile,Corporation> entry :tileList) {
+                tiles.add(entry.getKey());
+            }
+            assertTrue("Contains the correct tile", tiles.contains(new Tile(1,0)));
+            assertTrue("Contains the correct tile", tiles.contains(new Tile(0,1)));
+            assertFalse("doesnt contain other tiles", tiles.contains(new Tile(8,10)));
+        }
+
+        List<Entry<Tile,Corporation>> tileList = board.getAffectedMergerTiles(new Tile(8,11));
+        assertEquals("should have 2 tiles", 2, tileList.size());
+
+        Set<Tile> tiles = new HashSet<>();
+        for(Entry<Tile,Corporation> entry :tileList) {
+            tiles.add(entry.getKey());
+        }
+        assertTrue("Contains the correct tile", tiles.contains(new Tile(8,10)));
+        assertTrue("Contains the correct tile", tiles.contains(new Tile(7,11)));
+        assertFalse("doesnt contain other tiles", tiles.contains(new Tile(1,0)));
+
     }
 }

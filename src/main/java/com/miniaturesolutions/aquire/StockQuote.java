@@ -45,19 +45,19 @@ public class StockQuote {
     public boolean equals(Object o) {
     	if (!(o instanceof StockQuote)) return false;
     	StockQuote quote = (StockQuote)o;
-    	return (quote.corporation == this.corporation) &&
-    			(quote.availableShareCount == this.availableShareCount) &&
-    			(quote.stockPrice == this.stockPrice);
+    	return (quote.getCorporation() == this.getCorporation()) &&
+    			(quote.getAvailableShares() == this.getAvailableShares()) &&
+    			(quote.getStockPrice() == this.getStockPrice());
     											
     }
    /*
-    @Override
-    public int hashCode() {
-    	int result = 17;
-    	result = 31 * result + availableShareCount;
-    	result = 31 * result + corporation.ordinal();
-       	result = 31 * result + stockPrice;
-    	return result;
+   // @Override
+   // public int hashCode() {
+   // 	int result = 17;
+   // 	result = 31 * result + availableShareCount;
+   // 	result = 31 * result + corporation.ordinal();
+   //    	result = 31 * result + stockPrice;
+    //	return result;
     }
     */
 }

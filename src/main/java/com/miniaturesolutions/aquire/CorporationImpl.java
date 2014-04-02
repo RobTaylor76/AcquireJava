@@ -27,7 +27,7 @@ public class CorporationImpl {
 
 	/**
 	 * Is the corporation DORMANT, ACTIVE or DEFUNCT?
-	 * @param active DORMANT, ACTIVE or DEFUNCT
+	 * @param status DORMANT, ACTIVE or DEFUNCT
 	 */
 	public void setStatus(Status status) {
 		this.status = status;

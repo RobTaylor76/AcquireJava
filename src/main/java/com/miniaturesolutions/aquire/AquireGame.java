@@ -34,6 +34,9 @@ public class AquireGame {
 	public AquireGame(Board board) {
 		this.board = board;
         for(Corporation def : Corporation.values()) {
+            if (def == Corporation.UNINCORPORATED) {
+                continue;
+            }
         	CorporationImpl corp = new CorporationImpl(def);
             corporationMap.put(def,corp);
         }
