@@ -86,10 +86,13 @@ public class AquireGame {
 		Tile placedTile = player.placeTile(validTiles);
 		
 		List<Entry<Tile, Corporation>> affectedTiles = board.getAffectedMergerTiles(placedTile);
+		//if all tiles unincorporated then form corporation 
+		player.selectCorporationToForm(adviser.availableCorporations());
+		//else if a merger needs resolving...
+		List<StockQuote> valueOfMergingCorporations = new LinkedList<>();
+		player.resolveMerger(valueOfMergingCorporations);
 		
-		List<StockQuote> availableCorporations = adviser.availableCorporations(); 
-		
-		player.selectCorporationToForm(availableCorporations);
+		player.purchaseShares(adviser.getStockMarket(), 0);
 	}
 	
 

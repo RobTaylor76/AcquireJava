@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.miniaturesolutions.aquire.Corporation.Status;
 import com.miniaturesolutions.aquire.Corporation.Tier;
 
 public class CorportationImplTest {
@@ -15,6 +16,7 @@ public class CorportationImplTest {
 			CorporationImpl newCorp = new CorporationImpl(def);
 			assertEquals("Should have correct number of shares", def.getTotalShareCount(), 
 																	newCorp.getRemainingShareCount());
+			assertEquals("should be dormatn", Status.DORMANT, newCorp.getStatus());
 		}		
 	}
 	

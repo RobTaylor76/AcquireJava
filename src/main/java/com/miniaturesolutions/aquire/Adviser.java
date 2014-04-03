@@ -13,6 +13,9 @@ public class Adviser {
 	final private Board board;
 	final private Map<Corporation, CorporationImpl> corporationMap;
 	
+	final Status[] activeStatuses =  {Status.ACTIVE};
+	final Status[] availableStatuses =  {Status.DEFUNCT,Status.DORMANT};
+	
 	/**
 	 * A adviser for the Game... can hand to clients as readonly object for querying
      * @param corporationMap
@@ -47,18 +50,8 @@ public class Adviser {
      * Get the current stock market condition... Active corporations only
      * @return
      */
-	public Map<Corporation, StockQuote> getStockMarket() {
-		// TODO Auto-generated method stub
-		Map<Corporation, StockQuote> stockMarket = new HashMap<>();
-		
-		for(Entry<Corporation, CorporationImpl> entry : corporationMap.entrySet()) {
-            CorporationImpl corp = entry.getValue();
-			if (corp.getStatus() == Status.ACTIVE) {
-                StockQuote quote = new StockQuote(corp);
-                stockMarket.put(entry.getKey(), quote);
-			}
-		}		
-		return stockMarket;
+	public List<StockQuote> getStockMarket() {
+		return filterCorporationsByState(activeStatuses);
 	}
 
 	/**
@@ -66,16 +59,22 @@ public class Adviser {
 	 * 
 	 * @return List of stock market quotes for the available corporations
 	 */
-	public List<StockQuote> availableCorporations() {
-		List<StockQuote> availableCorporations = new LinkedList<>();
+	public List<StockQuote> availableCorporations() {	
+		return filterCorporationsByState(availableStatuses);
+	}
+		
+	private List<StockQuote> filterCorporationsByState(Status[] statuses) {
+		List<StockQuote> filteredCorporations = new LinkedList<>();
 		
 		for(Entry<Corporation, CorporationImpl> entry : corporationMap.entrySet()) {
             CorporationImpl corp = entry.getValue();
-			if (corp.getStatus() != Status.ACTIVE) {
-                StockQuote quote = new StockQuote(corp);
-                availableCorporations.add(quote);
-			}
-		}		
-		return availableCorporations;
+            for(Status status: statuses) {
+            	if (status == corp.getStatus()) {
+                    StockQuote quote = new StockQuote(corp);
+                    filteredCorporations.add(quote);
+    			}       	
+            }
+		}
+		return filteredCorporations;
 	}
 }

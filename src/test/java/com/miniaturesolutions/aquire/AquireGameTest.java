@@ -2,11 +2,15 @@ package com.miniaturesolutions.aquire;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.miniaturesolutions.aquire.Corporation.Status;
 
 import static org.mockito.Mockito.*;
 
@@ -64,6 +68,10 @@ public class AquireGameTest {
 	public void playerPlacesTile() {
 		
 		Board board = factory.createBoard();
+		List<CorporationImpl> corporations = factory.createCorporations();
+		
+		CorporationImpl activeCorp = corporations.get(0);
+		activeCorp.setStatus(Status.ACTIVE);
 		
 		board.placeTile(new Tile(1,0));
 		board.placeTile(new Tile(0,1));
@@ -75,19 +83,28 @@ public class AquireGameTest {
 		game.addPlayer(player);
 		
 		
-		Tile tileToPlace = new Tile(0,0);
+		Tile tileToPlace = new Tile(2,0);
 		
 		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
 		
-		List<Tile> tiles = new LinkedList<>();
-
+		List<Entry<Tile, Corporation>> mergingTiles = board.getAffectedMergerTiles(tileToPlace);
+		
+		List<StockQuote> mergerCorporations = new ArrayList<>();
+		
+		//for(Entry<Tile, Corporation> corp : mergingTiles) {
+			//mergerCorporations.add(new StockMarket(corp.getValue()));
+		//}
 		
 		List<StockQuote> formationChoices = adviser.availableCorporations();
+		List<StockQuote> stockMarket = adviser.getStockMarket();
+		
 		
 		game.playGame();
 		verify(player).placeTile(any(List.class));
 		verify(player).selectCorporationToForm(eq(formationChoices));
 		
+		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+		verify(player).resolveMerger(eq(mergerCorporations));
 	}
 
 }

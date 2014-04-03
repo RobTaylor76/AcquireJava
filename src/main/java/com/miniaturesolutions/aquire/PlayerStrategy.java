@@ -35,4 +35,11 @@ public interface PlayerStrategy {
 	 */
 	Corporation resolveMerger(List<StockQuote> corporations);
 
+	/**
+	 * The player has the opportunity to buy shares in any active corporations
+	 * @param currentStockMarket
+	 * @param availableCash
+	 */
+	void purchaseShares(List<StockQuote> currentStockMarket, int availableCash);
+
 }

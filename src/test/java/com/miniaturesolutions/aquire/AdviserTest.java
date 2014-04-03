@@ -43,7 +43,7 @@ public class AdviserTest {
 		//no active corporations... no available corporations
 		//never show unincorporated
 
-		Map<Corporation,StockQuote> stockMarket = adviser.getStockMarket();
+		List<StockQuote> stockMarket = adviser.getStockMarket();
 		assertEquals("Should be empty market",0,stockMarket.size());
 
 		//need to create a corporation that is active...
@@ -52,7 +52,7 @@ public class AdviserTest {
 		stockMarket = adviser.getStockMarket();
 		assertEquals("Should 1 entry",1,stockMarket.size());
 
-		StockQuote quote = stockMarket.get(corp.getCorporation());
+		StockQuote quote = stockMarket.get(0);
 		assertNotNull("Should have a live quote",quote);
 
         assertEquals("Should have correct value for the shares",

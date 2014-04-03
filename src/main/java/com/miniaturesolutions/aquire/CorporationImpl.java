@@ -15,6 +15,7 @@ public class CorporationImpl {
 	public CorporationImpl(Corporation corporation) {
 		this.corporation = corporation;
 		this.availableShares = corporation.getTotalShareCount();
+		this.status = Status.DORMANT;
 	}
 
 	public int getRemainingShareCount() {
