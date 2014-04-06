@@ -20,8 +20,8 @@ public class StockQuoteTest {
     @Test
     public void testEquality() {
 
-        CorporationImpl ca = new CorporationImpl(Corporation.AMERICAN);
-        CorporationImpl cb = new CorporationImpl(Corporation.CONTINENTAL);
+        Corporation ca = new Corporation(NamedCorporation.AMERICAN);
+        Corporation cb = new Corporation(NamedCorporation.CONTINENTAL);
 
         StockQuote a = new StockQuote(ca);
         StockQuote b = new StockQuote(ca);
@@ -36,10 +36,10 @@ public class StockQuoteTest {
         assertFalse("different object", a.equals(new Long(1)));
 
         //branch coverage ;(
-        CorporationImpl cf = mock(CorporationImpl.class);
+        Corporation cf = mock(Corporation.class);
 
 
-        when(cf.getCorporation()).thenReturn(Corporation.CONTINENTAL);
+        when(cf.getCorporation()).thenReturn(NamedCorporation.CONTINENTAL);
         when(cf.getCurrentStockPrice()).thenReturn(333);
         when(cf.getRemainingShareCount()).thenReturn(99);
 
@@ -47,14 +47,14 @@ public class StockQuoteTest {
 
         assertFalse("different stock price and remaining stock", fake.equals(c));
 
-        when(cf.getCorporation()).thenReturn(Corporation.CONTINENTAL);
+        when(cf.getCorporation()).thenReturn(NamedCorporation.CONTINENTAL);
         when(cf.getCurrentStockPrice()).thenReturn(cb.getCurrentStockPrice());
         when(cf.getRemainingShareCount()).thenReturn(99);
 
         fake = new StockQuote(cf);
         assertFalse("different stock price", fake.equals(c));
 
-        when(cf.getCorporation()).thenReturn(Corporation.CONTINENTAL);
+        when(cf.getCorporation()).thenReturn(NamedCorporation.CONTINENTAL);
         when(cf.getCurrentStockPrice()).thenReturn(333);
         when(cf.getRemainingShareCount()).thenReturn(cb.getRemainingShareCount());
 

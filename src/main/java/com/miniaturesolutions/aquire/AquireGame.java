@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.miniaturesolutions.aquire.Corporation.Status;
+import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
 /**
  * Main Game context
@@ -17,7 +17,7 @@ public class AquireGame {
 
 	final private Adviser adviser;
 	final private Board board;
-    final private Map<Corporation,CorporationImpl> corporationMap = new HashMap<>();
+    final private Map<NamedCorporation,Corporation> corporationMap = new HashMap<>();
 	private PlayerStrategy player;
     
 	/**
@@ -27,8 +27,8 @@ public class AquireGame {
 	public AquireGame(AquireFactory factory) {
 		this.board = factory.createBoard();
 		
-		List<CorporationImpl> corporations = factory.createCorporations();
-        for(CorporationImpl corp : corporations) {
+		List<Corporation> corporations = factory.createCorporations();
+        for(Corporation corp : corporations) {
             corporationMap.put(corp.getCorporation(),corp);
         }
         adviser = new Adviser(board, corporationMap);	
@@ -40,13 +40,13 @@ public class AquireGame {
 	 * @param corp2
 	 * @return winner or null if a tie
 	 */
-    public CorporationImpl whoWinsMerge(CorporationImpl corp1, CorporationImpl corp2) {
-		CorporationImpl winner = null; // if no clear winner then we need to make a choice, just return null for now
+    public Corporation whoWinsMerge(Corporation corp1, Corporation corp2) {
+		Corporation winner = null; // if no clear winner then we need to make a choice, just return null for now
 
-		if (corp1.getCorporation() == Corporation.UNINCORPORATED) {
+		if (corp1.getCorporation() == NamedCorporation.UNINCORPORATED) {
 			winner = corp2;
 		}
-		if (corp2.getCorporation() == Corporation.UNINCORPORATED) {
+		if (corp2.getCorporation() == NamedCorporation.UNINCORPORATED) {
 			winner = corp1;
 		}
 		
@@ -85,7 +85,7 @@ public class AquireGame {
 		
 		Tile placedTile = player.placeTile(validTiles);
 		
-		List<Entry<Tile, Corporation>> affectedTiles = board.getAffectedMergerTiles(placedTile);
+		List<Entry<Tile, NamedCorporation>> affectedTiles = board.getAffectedMergerTiles(placedTile);
 		//if all tiles unincorporated then form corporation 
 		player.selectCorporationToForm(adviser.availableCorporations());
 		//else if a merger needs resolving...

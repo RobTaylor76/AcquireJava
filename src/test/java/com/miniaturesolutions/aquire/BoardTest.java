@@ -43,7 +43,7 @@ public class BoardTest {
         assertTrue("tile on board ", board.isTilePlaced(testTile1.displayedAs()));
         assertTrue("tile on board ", board.isTilePlaced(testTile2.displayedAs()));
         
-        Entry<Tile,Corporation> placedTile;
+        Entry<Tile,NamedCorporation> placedTile;
         
         placedTile =  board.getTile("XX");
         assertNull("tile doesnt exist ", placedTile);
@@ -51,7 +51,7 @@ public class BoardTest {
         placedTile =  board.getTile(testTile1.displayedAs());
 
         assertEquals("tile matches ", testTile1, placedTile.getKey());
-        assertEquals("corporation matches ", Corporation.UNINCORPORATED, placedTile.getValue());
+        assertEquals("corporation matches ", NamedCorporation.UNINCORPORATED, placedTile.getValue());
 
         placedTile =  board.getTile(testTile2.displayedAs());
         
@@ -70,10 +70,10 @@ public class BoardTest {
         board.placeTile(testTile2);
 
         
-    	Map<Tile,Corporation> state = board.getState();
+    	Map<Tile,NamedCorporation> state = board.getState();
 
-    	assertEquals("unincorpoarted tiles", Corporation.UNINCORPORATED,state.get(testTile1));
-    	assertEquals("unincorpoarted tiles", Corporation.UNINCORPORATED,state.get(testTile2));
+    	assertEquals("unincorpoarted tiles", NamedCorporation.UNINCORPORATED,state.get(testTile1));
+    	assertEquals("unincorpoarted tiles", NamedCorporation.UNINCORPORATED,state.get(testTile2));
     	assertNull("not on board!!!",state.get(testTile3)); 	
     }
     
@@ -91,11 +91,11 @@ public class BoardTest {
         testTiles.add(new Tile(1,1)) ;
 
         for(Tile tile :testTiles) {
-            List<Entry<Tile,Corporation>> tileList = board.getAffectedMergerTiles(tile);
+            List<Entry<Tile,NamedCorporation>> tileList = board.getAffectedMergerTiles(tile);
             assertEquals("should have 2 tiles", 2, tileList.size());
 
             Set<Tile> tiles = new HashSet<>();
-            for(Entry<Tile,Corporation> entry :tileList) {
+            for(Entry<Tile,NamedCorporation> entry :tileList) {
                 tiles.add(entry.getKey());
             }
             assertTrue("Contains the correct tile", tiles.contains(new Tile(1,0)));
@@ -103,11 +103,11 @@ public class BoardTest {
             assertFalse("doesnt contain other tiles", tiles.contains(new Tile(8,10)));
         }
 
-        List<Entry<Tile,Corporation>> tileList = board.getAffectedMergerTiles(new Tile(8,11));
+        List<Entry<Tile,NamedCorporation>> tileList = board.getAffectedMergerTiles(new Tile(8,11));
         assertEquals("should have 2 tiles", 2, tileList.size());
 
         Set<Tile> tiles = new HashSet<>();
-        for(Entry<Tile,Corporation> entry :tileList) {
+        for(Entry<Tile,NamedCorporation> entry :tileList) {
             tiles.add(entry.getKey());
         }
         assertTrue("Contains the correct tile", tiles.contains(new Tile(8,10)));

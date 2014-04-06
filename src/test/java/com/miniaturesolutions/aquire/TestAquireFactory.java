@@ -5,7 +5,7 @@ import java.util.List;
 public class TestAquireFactory implements AquireFactory {
 
 	private Board board;
-	private List<CorporationImpl> corporations;
+	private List<Corporation> corporations;
 	
 	public TestAquireFactory() {
 		AquireFactory factory = new AquireFactoryImpl();
@@ -17,7 +17,7 @@ public class TestAquireFactory implements AquireFactory {
 	 * Will return the same corporations every time...
 	 */
 	@Override
-	public List<CorporationImpl> createCorporations() {
+	public List<Corporation> createCorporations() {
 		return corporations;
 	}
 

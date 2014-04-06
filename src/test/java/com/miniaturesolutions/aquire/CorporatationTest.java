@@ -4,16 +4,16 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.miniaturesolutions.aquire.Corporation.Status;
-import com.miniaturesolutions.aquire.Corporation.Tier;
+import com.miniaturesolutions.aquire.NamedCorporation.Status;
+import com.miniaturesolutions.aquire.NamedCorporation.Tier;
 
-public class CorportationImplTest {
+public class CorporatationTest {
 
 	@Test
 	public void createCorporation() {
 		
-		for(Corporation def : Corporation.values()) {
-			CorporationImpl newCorp = new CorporationImpl(def);
+		for(NamedCorporation def : NamedCorporation.values()) {
+			Corporation newCorp = new Corporation(def);
 			assertEquals("Should have correct number of shares", def.getTotalShareCount(), 
 																	newCorp.getRemainingShareCount());
 			assertEquals("should be dormatn", Status.DORMANT, newCorp.getStatus());
@@ -22,10 +22,10 @@ public class CorportationImplTest {
 	
 	@Test
 	public void testSharePrice() {
-		CorporationImpl corp = new CorporationImpl(Corporation.AMERICAN);
+		Corporation corp = new Corporation(NamedCorporation.AMERICAN);
 		Chain corpChain = corp.getChain();
 	
-		Tier corpTier = Corporation.AMERICAN.getTier();
+		Tier corpTier = NamedCorporation.AMERICAN.getTier();
 		
 		int expectedPrice = corpTier.getSharePrice(corpChain.getTileCount());
 		
@@ -34,7 +34,7 @@ public class CorportationImplTest {
 	
     @Test
     public void safeCorporation() {
-		CorporationImpl corp = new CorporationImpl(Corporation.AMERICAN);
+		Corporation corp = new Corporation(NamedCorporation.AMERICAN);
 
         Tile testTile1 = new Tile(0,0);    	
     	assertFalse("Should not be safe", corp.isSafe());

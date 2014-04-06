@@ -15,7 +15,7 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.miniaturesolutions.aquire.Corporation.Status;
+import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
 public class AdviserTest {
 	
@@ -35,9 +35,9 @@ public class AdviserTest {
 
 		adviser = game.getAdviser();
 		
-		List<CorporationImpl> corporations = factory.createCorporations();
+		List<Corporation> corporations = factory.createCorporations();
 		
-		CorporationImpl corp = corporations.get(0);
+		Corporation corp = corporations.get(0);
 		
 		
 		//no active corporations... no available corporations
@@ -87,9 +87,9 @@ public class AdviserTest {
 	
 	@Test
 	public void getAvailableCorporations() {
-		List<CorporationImpl> corporations = factory.createCorporations();
+		List<Corporation> corporations = factory.createCorporations();
 		
-		CorporationImpl corp = corporations.get(0);
+		Corporation corp = corporations.get(0);
 		corp.setStatus(Status.ACTIVE);
 				
 		List<StockQuote> availableCorporations = adviser.availableCorporations();

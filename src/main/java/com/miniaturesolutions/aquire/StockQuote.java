@@ -1,15 +1,16 @@
 package com.miniaturesolutions.aquire;
 
+
 public class StockQuote {
     private final int availableShareCount;
     private final int stockPrice;
-    private final Corporation corporation;
+    private final NamedCorporation namedCorporation;
 	private final int corporationTileCount;
 
-    public StockQuote(CorporationImpl corporation) {
+    public StockQuote(Corporation corporation) {
 		this.availableShareCount = corporation.getRemainingShareCount();
         this.stockPrice = corporation.getCurrentStockPrice();
-        this.corporation = corporation.getCorporation();
+        this.namedCorporation = corporation.getCorporation();
         this.corporationTileCount = corporation.getTileCount();
 	}
 
@@ -29,8 +30,8 @@ public class StockQuote {
         return stockPrice;
     }
 
-    public Corporation getCorporation() {
-        return corporation;
+    public NamedCorporation getCorporation() {
+        return namedCorporation;
     }
 
     /**

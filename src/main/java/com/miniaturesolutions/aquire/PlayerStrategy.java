@@ -21,7 +21,7 @@ public interface PlayerStrategy {
 	 * @param corporations
 	 * @return The corporation to form
 	 */
-	Corporation selectCorporationToForm(List<StockQuote> corporations);
+	NamedCorporation selectCorporationToForm(List<StockQuote> corporations);
 	
 	/**
 	 * A merge has occurred due to the placement of your tile
@@ -33,7 +33,7 @@ public interface PlayerStrategy {
 	 * @param corporations
 	 * @return which corporation will survive
 	 */
-	Corporation resolveMerger(List<StockQuote> corporations);
+	NamedCorporation resolveMerger(List<StockQuote> corporations);
 
 	/**
 	 * The player has the opportunity to buy shares in any active corporations

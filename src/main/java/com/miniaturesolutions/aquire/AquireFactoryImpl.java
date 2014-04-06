@@ -6,14 +6,14 @@ import java.util.List;
 public class AquireFactoryImpl implements AquireFactory {
 
 	@Override
-	public List<CorporationImpl> createCorporations() {
+	public List<Corporation> createCorporations() {
 		
-		List<CorporationImpl> coporations = new LinkedList<>();
-        for(Corporation def : Corporation.values()) {
-            if (def == Corporation.UNINCORPORATED) {
+		List<Corporation> coporations = new LinkedList<>();
+        for(NamedCorporation def : NamedCorporation.values()) {
+            if (def == NamedCorporation.UNINCORPORATED) {
                 continue;
             }
-        	CorporationImpl corp = new CorporationImpl(def);
+        	Corporation corp = new Corporation(def);
         	coporations.add(corp);
         }
 		return coporations; 

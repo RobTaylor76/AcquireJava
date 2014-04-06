@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.miniaturesolutions.aquire.Corporation.Status;
+import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
 public class Adviser {
 
 	final private Board board;
-	final private Map<Corporation, CorporationImpl> corporationMap;
+	final private Map<NamedCorporation, Corporation> corporationMap;
 	
 	final Status[] activeStatuses =  {Status.ACTIVE};
 	final Status[] availableStatuses =  {Status.DEFUNCT,Status.DORMANT};
@@ -21,7 +21,7 @@ public class Adviser {
      * @param corporationMap
      */
 
-	  public Adviser(Board board, Map<Corporation, CorporationImpl> corporationMap) {
+	  public Adviser(Board board, Map<NamedCorporation, Corporation> corporationMap) {
 			this.board = board;
 			this.corporationMap = corporationMap;
 	}
@@ -66,8 +66,8 @@ public class Adviser {
 	private List<StockQuote> filterCorporationsByState(Status[] statuses) {
 		List<StockQuote> filteredCorporations = new LinkedList<>();
 		
-		for(Entry<Corporation, CorporationImpl> entry : corporationMap.entrySet()) {
-            CorporationImpl corp = entry.getValue();
+		for(Entry<NamedCorporation, Corporation> entry : corporationMap.entrySet()) {
+            Corporation corp = entry.getValue();
             for(Status status: statuses) {
             	if (status == corp.getStatus()) {
                     StockQuote quote = new StockQuote(corp);

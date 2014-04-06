@@ -3,7 +3,6 @@ package com.miniaturesolutions.aquire;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,8 +52,8 @@ public class ChainTest {
     public void chainOwnerShip() {
     	Chain testChain = new Chain();
     	
-    	testChain.setCorporation(Corporation.UNINCORPORATED);
+    	testChain.setCorporation(NamedCorporation.UNINCORPORATED);
     	
-    	assertEquals("Should be unincorporated",testChain.getCorporation(),Corporation.UNINCORPORATED);
+    	assertEquals("Should be unincorporated",testChain.getCorporation(),NamedCorporation.UNINCORPORATED);
     }
 }

@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.miniaturesolutions.aquire.Corporation.Status;
+import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
 import static org.mockito.Mockito.*;
 
@@ -35,17 +35,17 @@ public class AquireGameTest {
 	@Test 
 	public void resolveMerges() {
 
-		CorporationImpl corp1 = new CorporationImpl(Corporation.UNINCORPORATED);
-		CorporationImpl corp2 = new CorporationImpl(Corporation.AMERICAN);
+		Corporation corp1 = new Corporation(NamedCorporation.UNINCORPORATED);
+		Corporation corp2 = new Corporation(NamedCorporation.AMERICAN);
 
 
-		CorporationImpl winner = game.whoWinsMerge(corp1,corp2);
+		Corporation winner = game.whoWinsMerge(corp1,corp2);
 		assertEquals("AMERICAN should win", corp2, winner);
 
         winner = game.whoWinsMerge(corp2,corp1);
         assertEquals("AMERICAN should win", corp2, winner);
 
-		corp1 = new CorporationImpl(Corporation.SACKSON);
+		corp1 = new Corporation(NamedCorporation.SACKSON);
 
 		//chain with most tiles wins
 		for(int i=0; i<3; i++) {
@@ -68,9 +68,9 @@ public class AquireGameTest {
 	public void playerPlacesTile() {
 		
 		Board board = factory.createBoard();
-		List<CorporationImpl> corporations = factory.createCorporations();
+		List<Corporation> corporations = factory.createCorporations();
 		
-		CorporationImpl activeCorp = corporations.get(0);
+		Corporation activeCorp = corporations.get(0);
 		activeCorp.setStatus(Status.ACTIVE);
 		
 		board.placeTile(new Tile(1,0));
@@ -87,7 +87,7 @@ public class AquireGameTest {
 		
 		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
 		
-		List<Entry<Tile, Corporation>> mergingTiles = board.getAffectedMergerTiles(tileToPlace);
+		List<Entry<Tile, NamedCorporation>> mergingTiles = board.getAffectedMergerTiles(tileToPlace);
 		
 		List<StockQuote> mergerCorporations = new ArrayList<>();
 		
