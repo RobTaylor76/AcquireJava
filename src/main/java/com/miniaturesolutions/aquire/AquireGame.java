@@ -85,7 +85,7 @@ public class AquireGame {
 		
 		Tile placedTile = player.placeTile(validTiles);
 		
-		List<Entry<Tile, NamedCorporation>> affectedTiles = board.getAffectedMergerTiles(placedTile);
+	//	List<Entry<Tile, Corporation>> affectedTiles = board.getAffectedMergerTiles(placedTile);
 		//if all tiles unincorporated then form corporation 
 		player.selectCorporationToForm(adviser.availableCorporations());
 		//else if a merger needs resolving...

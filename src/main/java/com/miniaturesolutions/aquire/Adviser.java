@@ -1,6 +1,5 @@
 package com.miniaturesolutions.aquire;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ public class Adviser {
 	final private Map<NamedCorporation, Corporation> corporationMap;
 	
 	final Status[] activeStatuses =  {Status.ACTIVE};
-	final Status[] availableStatuses =  {Status.DEFUNCT,Status.DORMANT};
+	final Status[] availableStatuses =  {Status.DEFUNCT, Status.DORMANT};
 	
 	/**
 	 * A adviser for the Game... can hand to clients as readonly object for querying
@@ -32,18 +31,7 @@ public class Adviser {
      * @return
      */
     public boolean willTileCauseMerger(Tile tile) {
-    	return  checkIfTileExists(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow()) ||
-    			checkIfTileExists(tile.getColumn() < 8,  tile.getColumn()+1, tile.getRow()) ||
-    			checkIfTileExists(tile.getRow()    > 0,  tile.getColumn(),   tile.getRow()-1) ||
-    			checkIfTileExists(tile.getRow()    < 11, tile.getColumn(),   tile.getRow()+1);
-    }
-
-    private boolean checkIfTileExists(boolean condition, int column, int row) {
-        boolean tilePresent = false;
-        if (condition) {
-            tilePresent = board.isTilePlaced(Tile.getTileName(column, row));              
-        }
-        return tilePresent;
+    	return  board.willTileCauseMerger(tile);
     }
 
     /** 

@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 public class Board {
 
     private List<Tile> availableTiles = new ArrayList<>();
-    private Map<String,Entry<Tile,NamedCorporation>> placedTiles = new HashMap<>();
+    private Map<String,Entry<Tile,Corporation>> placedTiles = new HashMap<>();
 
     /**
      * Create a new game board
@@ -55,14 +55,14 @@ public class Board {
      */
     public void placeTile(Tile tile) {
         placedTiles.put(tile.toString(), 
-        		new AbstractMap.SimpleEntry<>(tile,NamedCorporation.UNINCORPORATED));
+        		new AbstractMap.SimpleEntry<>(tile,new Corporation(NamedCorporation.UNINCORPORATED)));
     }
 
     /**
      * Get the tile from the board
      * @param tileName
      */
-    public Entry<Tile, NamedCorporation> getTile(String tileName){
+    public Entry<Tile, Corporation> getTile(String tileName){
         return placedTiles.get(tileName);
     }
 
@@ -74,8 +74,8 @@ public class Board {
 		Map<Tile, NamedCorporation> state = new HashMap<>();
 		
 		for(String key: placedTiles.keySet()) {
-			Entry<Tile,NamedCorporation> placedTile = placedTiles.get(key);
-			state.put(placedTile.getKey(), placedTile.getValue()); 
+			Entry<Tile,Corporation> placedTile = placedTiles.get(key);
+			state.put(placedTile.getKey(), placedTile.getValue().getCorporation()); 
 		}
 		return state;
 	}
@@ -85,8 +85,8 @@ public class Board {
 	 * @param tile
 	 * @return A List of tiles and the corporation they belong to
 	 */
-	public List<Entry<Tile, NamedCorporation>> getAffectedMergerTiles(Tile tile) {
-		List<Entry<Tile,NamedCorporation>> list = new LinkedList<>();
+	public List<Entry<Tile, Corporation>> getAffectedMergerTiles(Tile tile) {
+		List<Entry<Tile,Corporation>> list = new LinkedList<>();
 
 		addTileToList(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow(),		list); 
 		addTileToList(tile.getColumn() < 8,  tile.getColumn()+1, tile.getRow(),		list);
@@ -105,13 +105,31 @@ public class Board {
 	 * @param list
 	 */
 	private void addTileToList(boolean condition, int column, int row, 
-													List<Entry<Tile,NamedCorporation>> list) {
+													List<Entry<Tile,Corporation>> list) {
         if (condition) {
-        	Entry<Tile,NamedCorporation> tile = getTile(Tile.getTileName(column, row));
+        	Entry<Tile,Corporation> tile = getTile(Tile.getTileName(column, row));
         	if (tile != null) {
         		list.add(tile);
         	}
         }
 	}
-	
+	/**
+     * Will placing this tile cause a merge... checks adjacent squares but not diagonals...
+     * @param tile
+     * @return
+     */
+    public boolean willTileCauseMerger(Tile tile) {
+    	return  checkIfTileExists(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow()) ||
+    			checkIfTileExists(tile.getColumn() < 8,  tile.getColumn()+1, tile.getRow()) ||
+    			checkIfTileExists(tile.getRow()    > 0,  tile.getColumn(),   tile.getRow()-1) ||
+    			checkIfTileExists(tile.getRow()    < 11, tile.getColumn(),   tile.getRow()+1);
+    }
+
+    private boolean checkIfTileExists(boolean condition, int column, int row) {
+        boolean tilePresent = false;
+        if (condition) {
+            tilePresent = isTilePlaced(Tile.getTileName(column, row));              
+        }
+        return tilePresent;
+    }
 }

@@ -87,7 +87,7 @@ public class AquireGameTest {
 		
 		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
 		
-		List<Entry<Tile, NamedCorporation>> mergingTiles = board.getAffectedMergerTiles(tileToPlace);
+		List<Entry<Tile, Corporation>> mergingTiles = board.getAffectedMergerTiles(tileToPlace);
 		
 		List<StockQuote> mergerCorporations = new ArrayList<>();
 		
@@ -98,9 +98,8 @@ public class AquireGameTest {
 		List<StockQuote> formationChoices = adviser.availableCorporations();
 		List<StockQuote> stockMarket = adviser.getStockMarket();
 		
-		
 		game.playGame();
-		verify(player).placeTile(any(List.class));
+		verify(player).placeTile(any(List.class)); //gets a list of tiles to place
 		verify(player).selectCorporationToForm(eq(formationChoices));
 		
 		verify(player).purchaseShares(eq(stockMarket),any(int.class));
