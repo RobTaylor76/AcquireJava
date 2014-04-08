@@ -37,8 +37,8 @@ public class AquireGameTest {
 
 	@Test
 	public void getAdviser() {
-		Adviser adviser = game.getAdviser();
-		assertNotNull("should create an adviser", adviser);
+		AquireAdviser adviserImpl = game.getAdviser();
+		assertNotNull("should create an adviser", adviserImpl);
 	}
 
 
@@ -87,7 +87,7 @@ public class AquireGameTest {
 		
 		when(board.getAffectedTiles(eq(tileToPlace))).thenReturn(Collections.<Entry<Tile,Corporation>>emptyList());
 
-		Adviser adviser = game.getAdviser();
+		AquireAdviser adviser = game.getAdviser();
 		
 		List<StockQuote> stockMarket = adviser.getStockMarket();
 		
@@ -116,10 +116,11 @@ public class AquireGameTest {
 		
 		when(board.getAffectedTiles(eq(tileToPlace))).thenReturn(affectedTiles);
 
-		Adviser adviser = game.getAdviser();
+		AquireAdviser adviser = game.getAdviser();
+		
+		List<StockQuote> stockMarket = adviser.getStockMarket();
 		
 		List<StockQuote> formationChoices = adviser.availableCorporations();
-		List<StockQuote> stockMarket = adviser.getStockMarket();
 		
 		game.playGame();
 		verify(board).getAffectedTiles(eq(tileToPlace));
@@ -132,18 +133,23 @@ public class AquireGameTest {
 	
 	
 	@Test
-	public void playerPlacesTileThatCausesMerger() {
+	public void playerPlacesTileThatCausesAmbiguousMerger() {
 		
 		List<Corporation> corporations = factory.createCorporations();
 		
 		Corporation activeCorp1 = corporations.get(0);
 		activeCorp1.setStatus(Status.ACTIVE);
-
+		Chain chain1 = activeCorp1.getChain();
+		chain1.addTile(new Tile(1,1));
 
 		Corporation activeCorp2 = corporations.get(1);
 		activeCorp2.setStatus(Status.ACTIVE);
-
-		Adviser adviser = game.getAdviser();
+		Chain chain2 = activeCorp2.getChain();
+		chain2.addTile(new Tile(1,1));
+		
+		assertEquals("corporations are same size", activeCorp1.getTileCount(), activeCorp2.getTileCount());
+		
+		AquireAdviser adviser = game.getAdviser();
 		
 		Tile tileToPlace = new Tile(2,0);
 		
@@ -171,5 +177,53 @@ public class AquireGameTest {
 		verify(player).resolveMerger(eq(mergerCorporations));
 		verify(player).purchaseShares(eq(stockMarket),any(int.class));
 	}
+	
+	@Test
+	public void playerPlacesTileThatCausesUnAmbiguousMerger() {
+		
+		List<Corporation> corporations = factory.createCorporations();
+		
+		Corporation activeCorp1 = corporations.get(0);
+		activeCorp1.setStatus(Status.ACTIVE);
+		Chain chain1 = activeCorp1.getChain();
+		chain1.addTile(new Tile(1,1));
+		chain1.addTile(new Tile(2,1));
+		
+		Corporation activeCorp2 = corporations.get(1);
+		activeCorp2.setStatus(Status.ACTIVE);
+		Chain chain2 = activeCorp2.getChain();
+		chain2.addTile(new Tile(1,1));
+		
+		assertNotEquals("corporations are not the same size", activeCorp1.getTileCount(), activeCorp2.getTileCount());
+		
+		AquireAdviser adviser = game.getAdviser();
+		
+		Tile tileToPlace = new Tile(2,0);
+		
+		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
+		
+		List<Entry<Tile,Corporation>> affectedTiles = new LinkedList<>();
+		affectedTiles.add(new AbstractMap.SimpleEntry<>(new Tile(2,1),activeCorp1));
+		affectedTiles.add(new AbstractMap.SimpleEntry<>(new Tile(2,2),activeCorp2));
+		
+		when(board.getAffectedTiles(eq(tileToPlace))).thenReturn(affectedTiles);
+		
+		List<StockQuote> mergerCorporations = new ArrayList<>();
+		
+		for(Entry<Tile, Corporation> corp : affectedTiles) {
+			mergerCorporations.add(new StockQuote(corp.getValue()));
+		}
+		
+		List<StockQuote> formationChoices = adviser.availableCorporations();
+		List<StockQuote> stockMarket = adviser.getStockMarket();
+		
+		game.playGame();
+		verify(board).getAffectedTiles(eq(tileToPlace));
+		verify(player).placeTile(any(List.class)); //gets a list of tiles to place		
+
+		verify(player, never()).resolveMerger(eq(mergerCorporations));
+		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+	}
+
 
 }

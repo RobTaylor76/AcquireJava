@@ -20,9 +20,9 @@ public class AquireFactoryTest {
 	public void testFactory() {
 		AquireFactory factory = new AquireFactoryImpl();
 		
-		AquireBoard boardImpl = factory.createBoard();
+		AquireBoard board = factory.createBoard();
 		
-		assertNotNull("have a board",boardImpl);
+		assertNotNull("have a board",board);
 	
 		List<Corporation> corporations = factory.createCorporations();
 		
@@ -30,6 +30,9 @@ public class AquireFactoryTest {
 		for(Corporation corp: corporations) {
 			assertFalse("should not be unincorporated", corp.getCorporationName() == NamedCorporation.UNINCORPORATED);
 		}
+		
+		AquireAdviser adviser = factory.createAdviser(board, corporations);		
+		assertNotNull("have an adviser",adviser);
 	}
 
 }

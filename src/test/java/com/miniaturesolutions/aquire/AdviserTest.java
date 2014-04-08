@@ -19,21 +19,23 @@ import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
 public class AdviserTest {
 	
-	private AquireGame game;
-	private Adviser adviser;
+	private AdviserImpl adviser;
 	private AquireFactory factory;
+	private AquireBoard board;
+	private List<Corporation> corporations;
 	
 	@Before
 	public void setUp() {
 		factory = new TestAquireFactory();
-		game = new AquireGame(factory);
-		adviser = game.getAdviser();
+		
+		board = factory.createBoard();
+		corporations = factory.createCorporations();
+		
+		adviser = new AdviserImpl(board, corporations);
 	}
 
 	@Test
 	public void getStockMarket() {
-
-		adviser = game.getAdviser();
 		
 		List<Corporation> corporations = factory.createCorporations();
 		

@@ -5,4 +5,5 @@ import java.util.List;
 public interface AquireFactory {
 	List<Corporation> createCorporations();
 	AquireBoard createBoard();
+	AquireAdviser createAdviser(AquireBoard board, List<Corporation> corporations);
 }

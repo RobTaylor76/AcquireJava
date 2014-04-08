@@ -17,9 +17,9 @@ import com.miniaturesolutions.aquire.NamedCorporation.Status;
  */
 public class AquireGame {
 
-	final private Adviser adviser;
+	final private AquireAdviser adviser;
 	final private AquireBoard board;
-    final private Map<NamedCorporation,Corporation> corporationMap = new HashMap<>();
+    final private List<Corporation> corporations;
 	private PlayerStrategy player;
     
 	/**
@@ -28,12 +28,8 @@ public class AquireGame {
 	 */
 	public AquireGame(AquireFactory factory) {
 		this.board = factory.createBoard();
-		
-		List<Corporation> corporations = factory.createCorporations();
-        for(Corporation corp : corporations) {
-            corporationMap.put(corp.getCorporationName(),corp);
-        }
-        adviser = new Adviser(board, corporationMap);	
+		this.corporations = factory.createCorporations();
+        this.adviser = factory.createAdviser(this.board, this.corporations);	
 	}
 
 	/**
@@ -66,7 +62,7 @@ public class AquireGame {
      * Exposes a readonly query interface for clients
      * @return
      */
-	public Adviser getAdviser() {
+	public AquireAdviser getAdviser() {
 		return adviser;
 	}
 
