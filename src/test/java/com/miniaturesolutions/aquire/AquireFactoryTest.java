@@ -13,22 +13,22 @@ public class AquireFactoryTest {
 		AquireFactory factory = mock(AquireFactory.class);
 		
 		List<Corporation> corporations = factory.createCorporations();
-		Board board = factory.createBoard();
+		AquireBoard boardImpl = factory.createBoard();
 	}
 	
 	@Test
 	public void testFactory() {
 		AquireFactory factory = new AquireFactoryImpl();
 		
-		Board board = factory.createBoard();
+		AquireBoard boardImpl = factory.createBoard();
 		
-		assertNotNull("have a board",board);
+		assertNotNull("have a board",boardImpl);
 	
 		List<Corporation> corporations = factory.createCorporations();
 		
 		assertEquals("should have 7", 7, corporations.size());
 		for(Corporation corp: corporations) {
-			assertFalse("should not be unincorporated", corp.getCorporation() == NamedCorporation.UNINCORPORATED);
+			assertFalse("should not be unincorporated", corp.getCorporationName() == NamedCorporation.UNINCORPORATED);
 		}
 	}
 

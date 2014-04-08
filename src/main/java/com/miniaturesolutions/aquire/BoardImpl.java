@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class Board {
+public class BoardImpl implements AquireBoard {
 
     private List<Tile> availableTiles = new ArrayList<>();
     private Map<String,Entry<Tile,Corporation>> placedTiles = new HashMap<>();
@@ -16,14 +16,14 @@ public class Board {
     /**
      * Create a new game board
      */
-	public Board() {
+	public BoardImpl() {
         buildAvailableTiles();
 	}
 
-    /**
-     *  Get list of tiles that have not been issued
-     * @return
-     */
+    /* (non-Javadoc)
+	 * @see com.miniaturesolutions.aquire.AquireBoard#getAvailableTiles()
+	 */
+	@Override
 	public List<Tile> getAvailableTiles() {
 		return availableTiles;
 	}
@@ -37,55 +37,50 @@ public class Board {
         }
     }
 
-    /**
-     * Is there a tile on the board?
-     * @param tileName
-     * @return
-     */
-    public boolean isTilePlaced(String tileName) {
+    /* (non-Javadoc)
+	 * @see com.miniaturesolutions.aquire.AquireBoard#isTilePlaced(java.lang.String)
+	 */
+    @Override
+	public boolean isTilePlaced(String tileName) {
         return placedTiles.containsKey(tileName);
     }
 
-    /**
-     * Simplistic place tile on board... no merging issues/legailty addressed
-     * 
-     * will manage this via a callback ... dont call me... i'll call you! 
-     * the player strategy will return the tile it wishes to place. 
-     * @param tile
-     */
-    public void placeTile(Tile tile) {
+    /* (non-Javadoc)
+	 * @see com.miniaturesolutions.aquire.AquireBoard#placeTile(com.miniaturesolutions.aquire.Tile)
+	 */
+    @Override
+	public void placeTile(Tile tile) {
         placedTiles.put(tile.toString(), 
         		new AbstractMap.SimpleEntry<>(tile,new Corporation(NamedCorporation.UNINCORPORATED)));
     }
 
-    /**
-     * Get the tile from the board
-     * @param tileName
-     */
-    public Entry<Tile, Corporation> getTile(String tileName){
+    /* (non-Javadoc)
+	 * @see com.miniaturesolutions.aquire.AquireBoard#getTile(java.lang.String)
+	 */
+    @Override
+	public Entry<Tile, Corporation> getTile(String tileName){
         return placedTiles.get(tileName);
     }
 
-    /**
-     * Get mutable array representing the game state...
-     * @return
-     */
+    /* (non-Javadoc)
+	 * @see com.miniaturesolutions.aquire.AquireBoard#getState()
+	 */
+	@Override
 	public Map<Tile, NamedCorporation> getState() {
 		Map<Tile, NamedCorporation> state = new HashMap<>();
 		
 		for(String key: placedTiles.keySet()) {
 			Entry<Tile,Corporation> placedTile = placedTiles.get(key);
-			state.put(placedTile.getKey(), placedTile.getValue().getCorporation()); 
+			state.put(placedTile.getKey(), placedTile.getValue().getCorporationName()); 
 		}
 		return state;
 	}
 
-	/**
-	 *  Get the tiles that would be involved in a merge by placing the tile
-	 * @param tile
-	 * @return A List of tiles and the corporation they belong to
+	/* (non-Javadoc)
+	 * @see com.miniaturesolutions.aquire.AquireBoard#getAffectedTiles(com.miniaturesolutions.aquire.Tile)
 	 */
-	public List<Entry<Tile, Corporation>> getAffectedMergerTiles(Tile tile) {
+	@Override
+	public List<Entry<Tile, Corporation>> getAffectedTiles(Tile tile) {
 		List<Entry<Tile,Corporation>> list = new LinkedList<>();
 
 		addTileToList(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow(),		list); 
@@ -113,12 +108,11 @@ public class Board {
         	}
         }
 	}
-	/**
-     * Will placing this tile cause a merge... checks adjacent squares but not diagonals...
-     * @param tile
-     * @return
-     */
-    public boolean willTileCauseMerger(Tile tile) {
+	/* (non-Javadoc)
+	 * @see com.miniaturesolutions.aquire.AquireBoard#willTileCauseMerger(com.miniaturesolutions.aquire.Tile)
+	 */
+    @Override
+	public boolean willTileCauseMerger(Tile tile) {
     	return  checkIfTileExists(tile.getColumn() > 0,  tile.getColumn()-1, tile.getRow()) ||
     			checkIfTileExists(tile.getColumn() < 8,  tile.getColumn()+1, tile.getRow()) ||
     			checkIfTileExists(tile.getRow()    > 0,  tile.getColumn(),   tile.getRow()-1) ||

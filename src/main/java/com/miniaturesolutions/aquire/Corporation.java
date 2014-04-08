@@ -78,7 +78,7 @@ public class Corporation {
 	 * What corporation does this represent?
 	 * @return
 	 */
-	public NamedCorporation getCorporation() {
+	public NamedCorporation getCorporationName() {
 		return namedCorporation;
 	}
 }

@@ -9,7 +9,7 @@ import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
 public class Adviser {
 
-	final private Board board;
+	final private AquireBoard boardImpl;
 	final private Map<NamedCorporation, Corporation> corporationMap;
 	
 	final Status[] activeStatuses =  {Status.ACTIVE};
@@ -20,8 +20,8 @@ public class Adviser {
      * @param corporationMap
      */
 
-	  public Adviser(Board board, Map<NamedCorporation, Corporation> corporationMap) {
-			this.board = board;
+	  public Adviser(AquireBoard boardImpl, Map<NamedCorporation, Corporation> corporationMap) {
+			this.boardImpl = boardImpl;
 			this.corporationMap = corporationMap;
 	}
 
@@ -31,7 +31,7 @@ public class Adviser {
      * @return
      */
     public boolean willTileCauseMerger(Tile tile) {
-    	return  board.willTileCauseMerger(tile);
+    	return  boardImpl.willTileCauseMerger(tile);
     }
 
     /** 

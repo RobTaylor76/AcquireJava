@@ -1,5 +1,7 @@
 package com.miniaturesolutions.aquire;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +18,7 @@ import com.miniaturesolutions.aquire.NamedCorporation.Status;
 public class AquireGame {
 
 	final private Adviser adviser;
-	final private Board board;
+	final private AquireBoard board;
     final private Map<NamedCorporation,Corporation> corporationMap = new HashMap<>();
 	private PlayerStrategy player;
     
@@ -29,7 +31,7 @@ public class AquireGame {
 		
 		List<Corporation> corporations = factory.createCorporations();
         for(Corporation corp : corporations) {
-            corporationMap.put(corp.getCorporation(),corp);
+            corporationMap.put(corp.getCorporationName(),corp);
         }
         adviser = new Adviser(board, corporationMap);	
 	}
@@ -43,10 +45,10 @@ public class AquireGame {
     public Corporation whoWinsMerge(Corporation corp1, Corporation corp2) {
 		Corporation winner = null; // if no clear winner then we need to make a choice, just return null for now
 
-		if (corp1.getCorporation() == NamedCorporation.UNINCORPORATED) {
+		if (corp1.getCorporationName() == NamedCorporation.UNINCORPORATED) {
 			winner = corp2;
 		}
-		if (corp2.getCorporation() == NamedCorporation.UNINCORPORATED) {
+		if (corp2.getCorporationName() == NamedCorporation.UNINCORPORATED) {
 			winner = corp1;
 		}
 		
@@ -85,12 +87,46 @@ public class AquireGame {
 		
 		Tile placedTile = player.placeTile(validTiles);
 		
-	//	List<Entry<Tile, Corporation>> affectedTiles = board.getAffectedMergerTiles(placedTile);
-		//if all tiles unincorporated then form corporation 
-		player.selectCorporationToForm(adviser.availableCorporations());
+		List<Entry<Tile, Corporation>> affectedTiles = board.getAffectedTiles(placedTile);
+		
+		if (affectedTiles.size() == 0) {
+			
+			
+		} else {
+			NamedCorporation mergerCheck = NamedCorporation.UNINCORPORATED;
+			boolean mergerOccuring = false;
+			for(Entry<Tile, Corporation> affectedTile: affectedTiles) {
+				Corporation corporation = affectedTile.getValue();
+				NamedCorporation corporationName = corporation.getCorporationName();
+				if (corporationName != NamedCorporation.UNINCORPORATED && 
+						mergerCheck != NamedCorporation.UNINCORPORATED) {
+					//need to resolve the merger....
+					mergerOccuring = true;
+				}
+				mergerCheck = corporationName;
+			}
+			if (mergerOccuring) {
+				List<StockQuote> mergerCorporations = new ArrayList<>();
+
+				for(Entry<Tile, Corporation> corp : affectedTiles) {
+					Corporation corporation = corp.getValue();
+					if (corporation.getCorporationName() != NamedCorporation.UNINCORPORATED) {
+						mergerCorporations.add(new StockQuote(corporation));
+					}
+				}
+				
+				player.resolveMerger(mergerCorporations);
+				
+			} else if(mergerCheck == NamedCorporation.UNINCORPORATED) {
+			//if all tiles unincorporated then form corporation 
+				player.selectCorporationToForm(adviser.availableCorporations());
+			}
+		}
+		
+		
 		//else if a merger needs resolving...
-		List<StockQuote> valueOfMergingCorporations = new LinkedList<>();
-		player.resolveMerger(valueOfMergingCorporations);
+		//List<StockQuote> valueOfMergingCorporations = new LinkedList<>();
+		//player.resolveMerger(valueOfMergingCorporations);
 		
 		player.purchaseShares(adviser.getStockMarket(), 0);
 	}

@@ -39,7 +39,7 @@ public class StockQuoteTest {
         Corporation cf = mock(Corporation.class);
 
 
-        when(cf.getCorporation()).thenReturn(NamedCorporation.CONTINENTAL);
+        when(cf.getCorporationName()).thenReturn(NamedCorporation.CONTINENTAL);
         when(cf.getCurrentStockPrice()).thenReturn(333);
         when(cf.getRemainingShareCount()).thenReturn(99);
 
@@ -47,14 +47,14 @@ public class StockQuoteTest {
 
         assertFalse("different stock price and remaining stock", fake.equals(c));
 
-        when(cf.getCorporation()).thenReturn(NamedCorporation.CONTINENTAL);
+        when(cf.getCorporationName()).thenReturn(NamedCorporation.CONTINENTAL);
         when(cf.getCurrentStockPrice()).thenReturn(cb.getCurrentStockPrice());
         when(cf.getRemainingShareCount()).thenReturn(99);
 
         fake = new StockQuote(cf);
         assertFalse("different stock price", fake.equals(c));
 
-        when(cf.getCorporation()).thenReturn(NamedCorporation.CONTINENTAL);
+        when(cf.getCorporationName()).thenReturn(NamedCorporation.CONTINENTAL);
         when(cf.getCurrentStockPrice()).thenReturn(333);
         when(cf.getRemainingShareCount()).thenReturn(cb.getRemainingShareCount());
 

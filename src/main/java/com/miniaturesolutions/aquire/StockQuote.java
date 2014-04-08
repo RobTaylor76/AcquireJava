@@ -10,7 +10,7 @@ public class StockQuote {
     public StockQuote(Corporation corporation) {
 		this.availableShareCount = corporation.getRemainingShareCount();
         this.stockPrice = corporation.getCurrentStockPrice();
-        this.namedCorporation = corporation.getCorporation();
+        this.namedCorporation = corporation.getCorporationName();
         this.corporationTileCount = corporation.getTileCount();
 	}
 

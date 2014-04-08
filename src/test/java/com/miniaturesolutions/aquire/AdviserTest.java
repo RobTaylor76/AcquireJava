@@ -60,7 +60,7 @@ public class AdviserTest {
                 quote.getStockPrice());
 
         assertEquals("Should have correct corporation",
-                corp.getCorporation(),
+                corp.getCorporationName(),
                 quote.getCorporation());
 
 
@@ -96,7 +96,7 @@ public class AdviserTest {
 		assertEquals("should only have 6 corporations as 1 is active", 6, availableCorporations.size());
 		
 		for(StockQuote quote: availableCorporations) {
-			assertFalse("dont list the active corporation", quote.getCorporation() == corp.getCorporation());
+			assertFalse("dont list the active corporation", quote.getCorporation() == corp.getCorporationName());
 		}
 	}
 	

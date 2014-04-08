@@ -20,8 +20,8 @@ public class AquireFactoryImpl implements AquireFactory {
 	}
 
 	@Override
-	public Board createBoard() {
-		return new Board();
+	public AquireBoard createBoard() {
+		return new BoardImpl();
 	}
 
 }

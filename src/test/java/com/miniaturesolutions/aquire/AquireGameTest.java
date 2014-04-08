@@ -2,12 +2,15 @@ package com.miniaturesolutions.aquire;
 
 import static org.junit.Assert.*;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.miniaturesolutions.aquire.NamedCorporation.Status;
@@ -18,11 +21,18 @@ public class AquireGameTest {
 
 	private AquireGame game;
 	private AquireFactory factory;
+	private AquireBoard board;
+	private PlayerStrategy player;
 	
 	@Before
 	public void doSetup() {
-		factory = new TestAquireFactory();
+		TestAquireFactory factoryImpl = new TestAquireFactory();
+		factory = factoryImpl;
+		board = mock(AquireBoard.class);
+		factoryImpl.setAquireBoard(board);
 		game = new AquireGame(factory);
+		player = mock(PlayerStrategy.class);
+		game.addPlayer(player);
 	}
 
 	@Test
@@ -63,47 +73,103 @@ public class AquireGameTest {
         winner = game.whoWinsMerge(corp2,corp1);
         assertEquals("SACKSON should win", corp1, winner);
     }
-	
-	@Test
-	public void playerPlacesTile() {
-		
-		Board board = factory.createBoard();
-		List<Corporation> corporations = factory.createCorporations();
-		
-		Corporation activeCorp = corporations.get(0);
-		activeCorp.setStatus(Status.ACTIVE);
-		
-		board.placeTile(new Tile(1,0));
-		board.placeTile(new Tile(0,1));
 
-		Adviser adviser = game.getAdviser();
-		
+	@Test
+	public void playerPlacesIsolatedTile() {
+				
 		PlayerStrategy player = mock(PlayerStrategy.class);
 		
 		game.addPlayer(player);
-		
 		
 		Tile tileToPlace = new Tile(2,0);
 		
 		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
 		
-		List<Entry<Tile, Corporation>> mergingTiles = board.getAffectedMergerTiles(tileToPlace);
+		when(board.getAffectedTiles(eq(tileToPlace))).thenReturn(Collections.<Entry<Tile,Corporation>>emptyList());
+
+		Adviser adviser = game.getAdviser();
 		
-		List<StockQuote> mergerCorporations = new ArrayList<>();
+		List<StockQuote> stockMarket = adviser.getStockMarket();
 		
-		//for(Entry<Tile, Corporation> corp : mergingTiles) {
-			//mergerCorporations.add(new StockMarket(corp.getValue()));
-		//}
+		game.playGame();
+		verify(board).getAffectedTiles(eq(tileToPlace));
+		verify(player).placeTile(any(List.class)); //gets a list of tiles to place
+		
+		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+		verify(player,never()).selectCorporationToForm(any(List.class));
+	}
+
+	
+	@Test
+	public void playerPlacesTileThatFormsCorporation() {
+				
+		PlayerStrategy player = mock(PlayerStrategy.class);
+		
+		game.addPlayer(player);
+		
+		Tile tileToPlace = new Tile(2,0);
+		
+		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
+		
+		List<Entry<Tile,Corporation>> affectedTiles = new LinkedList<>();
+		affectedTiles.add(new AbstractMap.SimpleEntry<>(new Tile(2,1),new Corporation(NamedCorporation.UNINCORPORATED)));
+		
+		when(board.getAffectedTiles(eq(tileToPlace))).thenReturn(affectedTiles);
+
+		Adviser adviser = game.getAdviser();
 		
 		List<StockQuote> formationChoices = adviser.availableCorporations();
 		List<StockQuote> stockMarket = adviser.getStockMarket();
 		
 		game.playGame();
+		verify(board).getAffectedTiles(eq(tileToPlace));
 		verify(player).placeTile(any(List.class)); //gets a list of tiles to place
+				
 		verify(player).selectCorporationToForm(eq(formationChoices));
-		
 		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+
+	}
+	
+	
+	@Test
+	public void playerPlacesTileThatCausesMerger() {
+		
+		List<Corporation> corporations = factory.createCorporations();
+		
+		Corporation activeCorp1 = corporations.get(0);
+		activeCorp1.setStatus(Status.ACTIVE);
+
+
+		Corporation activeCorp2 = corporations.get(1);
+		activeCorp2.setStatus(Status.ACTIVE);
+
+		Adviser adviser = game.getAdviser();
+		
+		Tile tileToPlace = new Tile(2,0);
+		
+		when(player.placeTile(any(List.class))).thenReturn(tileToPlace);
+		
+		List<Entry<Tile,Corporation>> affectedTiles = new LinkedList<>();
+		affectedTiles.add(new AbstractMap.SimpleEntry<>(new Tile(2,1),activeCorp1));
+		affectedTiles.add(new AbstractMap.SimpleEntry<>(new Tile(2,2),activeCorp2));
+		
+		when(board.getAffectedTiles(eq(tileToPlace))).thenReturn(affectedTiles);
+		
+		List<StockQuote> mergerCorporations = new ArrayList<>();
+		
+		for(Entry<Tile, Corporation> corp : affectedTiles) {
+			mergerCorporations.add(new StockQuote(corp.getValue()));
+		}
+		
+		List<StockQuote> formationChoices = adviser.availableCorporations();
+		List<StockQuote> stockMarket = adviser.getStockMarket();
+		
+		game.playGame();
+		verify(board).getAffectedTiles(eq(tileToPlace));
+		verify(player).placeTile(any(List.class)); //gets a list of tiles to place		
+
 		verify(player).resolveMerger(eq(mergerCorporations));
+		verify(player).purchaseShares(eq(stockMarket),any(int.class));
 	}
 
 }
