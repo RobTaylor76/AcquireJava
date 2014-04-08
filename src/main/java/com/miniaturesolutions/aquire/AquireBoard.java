@@ -25,8 +25,9 @@ public interface AquireBoard {
 	 * will manage this via a callback ... dont call me... i'll call you! 
 	 * the player strategy will return the tile it wishes to place. 
 	 * @param tile
+	 * @param corp 
 	 */
-	public abstract void placeTile(Tile tile);
+	public abstract void placeTile(Tile tile, Corporation corp);
 
 	/**
 	 * Get the tile from the board
@@ -53,5 +54,12 @@ public interface AquireBoard {
 	 * @return
 	 */
 	public abstract boolean willTileCauseMerger(Tile tile);
+
+	/**
+	 * Get the corporations affected by placing a tile
+	 * @param tile
+	 * @return
+	 */
+	public abstract List<Corporation> getAffectedCorporations(Tile tile);
 
 }

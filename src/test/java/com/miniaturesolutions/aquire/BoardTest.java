@@ -31,14 +31,16 @@ public class BoardTest {
     @Test
     public void storeTilesOnBoard() {
 
+    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
+    	
         Tile testTile1 = new Tile(0,0);
         Tile testTile2 = new Tile(6,6);
 
         assertFalse("tile not on board ", boardImpl.isTilePlaced(testTile1.displayedAs()));
         assertFalse("tile not on board ", boardImpl.isTilePlaced(testTile2.displayedAs()));
 
-        boardImpl.placeTile(testTile1);
-        boardImpl.placeTile(testTile2);
+        boardImpl.placeTile(testTile1, corp);
+        boardImpl.placeTile(testTile2, corp);
 
         assertTrue("tile on board ", boardImpl.isTilePlaced(testTile1.displayedAs()));
         assertTrue("tile on board ", boardImpl.isTilePlaced(testTile2.displayedAs()));
@@ -51,7 +53,7 @@ public class BoardTest {
         placedTile =  boardImpl.getTile(testTile1.displayedAs());
 
         assertEquals("tile matches ", testTile1, placedTile.getKey());
-        assertEquals("corporation matches ", NamedCorporation.UNINCORPORATED, placedTile.getValue().getCorporationName());
+        assertEquals("corporation matches ", corp, placedTile.getValue());
 
         placedTile =  boardImpl.getTile(testTile2.displayedAs());
         
@@ -60,31 +62,34 @@ public class BoardTest {
     
     @Test
     public void getBoardState() {
+    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
 
         
     	Tile testTile1 = new Tile(0,0);
         Tile testTile2 = new Tile(6,6);
         Tile testTile3 = new Tile(2,2);
         
-        boardImpl.placeTile(testTile1);
-        boardImpl.placeTile(testTile2);
+        boardImpl.placeTile(testTile1, corp);
+        boardImpl.placeTile(testTile2, corp);
 
         
     	Map<Tile,NamedCorporation> state = boardImpl.getState();
 
-    	assertEquals("unincorpoarted tiles", NamedCorporation.UNINCORPORATED,state.get(testTile1));
-    	assertEquals("unincorpoarted tiles", NamedCorporation.UNINCORPORATED,state.get(testTile2));
+    	assertEquals("unincorpoarted tiles", NamedCorporation.CONTINENTAL,state.get(testTile1));
+    	assertEquals("unincorpoarted tiles", NamedCorporation.CONTINENTAL,state.get(testTile2));
     	assertNull("not on board!!!",state.get(testTile3)); 	
     }
     
 	
     @Test
-    public void getMergeTiles() {
-		boardImpl.placeTile(new Tile(1,0));
-		boardImpl.placeTile(new Tile(0,1));
+    public void getAffectedTiles() {
+    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
 
-		boardImpl.placeTile(new Tile(8,10));
-		boardImpl.placeTile(new Tile(7,11));  
+    	boardImpl.placeTile(new Tile(1,0), corp);
+		boardImpl.placeTile(new Tile(0,1), corp);
+
+		boardImpl.placeTile(new Tile(8,10), corp);
+		boardImpl.placeTile(new Tile(7,11), corp);  
 
         List<Tile> testTiles = new LinkedList<>();
         testTiles.add(new Tile(0,0)) ;
@@ -115,15 +120,30 @@ public class BoardTest {
         assertFalse("doesnt contain other tiles", tiles.contains(new Tile(1,0)));
 
     }
+
+    @Test
+    public void getAffectedCorporations() {
+    	Corporation corp1 = new Corporation(NamedCorporation.CONTINENTAL);
+		boardImpl.placeTile(new Tile(1,0), corp1);
+		
+	   	Corporation corp2 = new Corporation(NamedCorporation.IMPERIAL);
+		boardImpl.placeTile(new Tile(0,1), corp2);
+
+		List<Corporation> affectedCorporations = boardImpl.getAffectedCorporations(new Tile(0,0));
+		
+		assertTrue("should contain corp1", affectedCorporations.contains(corp1));
+		assertTrue("should contain corp2", affectedCorporations.contains(corp2));    	
+    }
     
 	@Test
 	public void willTileCauseMerge() {
-		
-		boardImpl.placeTile(new Tile(1,0));
-		boardImpl.placeTile(new Tile(0,1));
+    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
 
-		boardImpl.placeTile(new Tile(8,10));
-		boardImpl.placeTile(new Tile(7,11));  
+		boardImpl.placeTile(new Tile(1,0), corp);
+		boardImpl.placeTile(new Tile(0,1), corp);
+
+		boardImpl.placeTile(new Tile(8,10), corp);
+		boardImpl.placeTile(new Tile(7,11), corp);  
 		
 		List<Tile> validMerges = new LinkedList<>();
 		validMerges.add(new Tile(0,0));

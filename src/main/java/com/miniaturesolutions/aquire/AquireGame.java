@@ -38,7 +38,7 @@ public class AquireGame {
 	 * @param corp2
 	 * @return winner or null if a tie
 	 */
-    public Corporation whoWinsMerge(Corporation corp1, Corporation corp2) {
+    protected Corporation whoWinsMerge(Corporation corp1, Corporation corp2) {
 		Corporation winner = null; // if no clear winner then we need to make a choice, just return null for now
 
 		if (corp1.getCorporationName() == NamedCorporation.UNINCORPORATED) {
@@ -83,49 +83,66 @@ public class AquireGame {
 		
 		Tile placedTile = player.placeTile(validTiles);
 		
-		List<Entry<Tile, Corporation>> affectedTiles = board.getAffectedTiles(placedTile);
+		List<Corporation> affectedTiles = board.getAffectedCorporations(placedTile);
+		Corporation tilesCorporation;
 		
 		if (affectedTiles.size() == 0) {
-			
-			
+			tilesCorporation = new Corporation(NamedCorporation.UNINCORPORATED);
 		} else {
-			NamedCorporation mergerCheck = NamedCorporation.UNINCORPORATED;
-			boolean mergerOccuring = false;
-			for(Entry<Tile, Corporation> affectedTile: affectedTiles) {
-				Corporation corporation = affectedTile.getValue();
-				NamedCorporation corporationName = corporation.getCorporationName();
-				if (corporationName != NamedCorporation.UNINCORPORATED && 
-						mergerCheck != NamedCorporation.UNINCORPORATED) {
-					//need to resolve the merger....
-					mergerOccuring = true;
-				}
-				mergerCheck = corporationName;
+			tilesCorporation = resolveCorporationMergers(affectedTiles);
+		}
+		board.placeTile(placedTile, tilesCorporation);
+		
+		player.purchaseShares(adviser.getStockMarket(), 0);
+	}
+	
+	private boolean willAMergerOccur(List<Corporation> affectedTiles) {
+		NamedCorporation mergerCheck = NamedCorporation.UNINCORPORATED;
+		boolean mergerOccuring = false;
+		for(Corporation corporation: affectedTiles) {
+			NamedCorporation corporationName = corporation.getCorporationName();
+			if (corporationName != NamedCorporation.UNINCORPORATED && 
+					mergerCheck != NamedCorporation.UNINCORPORATED) {
+				//need to resolve the merger....
+				mergerOccuring = true;
 			}
-			if (mergerOccuring) {
+			mergerCheck = corporationName;
+		}		
+		return mergerOccuring;
+	}
+	
+	private Corporation resolveCorporationMergers(List<Corporation> affectedCorporations) {
+		Corporation winner = null;
+		boolean mergerOccuring = willAMergerOccur(affectedCorporations);
+		
+		NamedCorporation winnerName = NamedCorporation.UNINCORPORATED;
+		if (mergerOccuring) {
+			// #TODO : need to cope with more than 2 corporations merging...
+			winner = whoWinsMerge(affectedCorporations.get(0),affectedCorporations.get(1));
+			if (winner == null) {
 				List<StockQuote> mergerCorporations = new ArrayList<>();
 
-				for(Entry<Tile, Corporation> corp : affectedTiles) {
-					Corporation corporation = corp.getValue();
+				for(Corporation corporation : affectedCorporations) {
 					if (corporation.getCorporationName() != NamedCorporation.UNINCORPORATED) {
 						mergerCorporations.add(new StockQuote(corporation));
 					}
 				}
 				
-				player.resolveMerger(mergerCorporations);
-				
-			} else if(mergerCheck == NamedCorporation.UNINCORPORATED) {
-			//if all tiles unincorporated then form corporation 
-				player.selectCorporationToForm(adviser.availableCorporations());
-			}
+				winnerName = player.resolveMerger(mergerCorporations);
+			} 
+		} else { //if(mergerCheck == NamedCorporation.UNINCORPORATED) {
+		//if all tiles unincorporated then form corporation 
+			winnerName = player.selectCorporationToForm(adviser.availableCorporations());
 		}
 		
-		
-		//else if a merger needs resolving...
-		//List<StockQuote> valueOfMergingCorporations = new LinkedList<>();
-		//player.resolveMerger(valueOfMergingCorporations);
-		
-		player.purchaseShares(adviser.getStockMarket(), 0);
+		if (winner == null) {
+			for(Corporation corp: affectedCorporations) {
+				if (corp.getCorporationName() == winnerName) {
+					winner = corp;
+					break;
+				}
+			}			
+		}
+		return winner;
 	}
-	
-
 }

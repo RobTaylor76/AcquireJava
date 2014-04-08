@@ -25,7 +25,7 @@ Need to have strategies...
 		
 			
 		Representation of board
-			need to provide unmutable or copies of the state...-> Map<Tile,Corporation>
+			need to provide unmutable or copies of the state...-> Map<Tile,NamedCorporation>
 						
 		Ability to place a tile, 
 			if a merger will be created and their is a tie, who will win?	
@@ -41,7 +41,7 @@ Need to have strategies...
 				UNCORPORTED						-> empty list
 				ILLEGAL							-> empty list No Available corporations
 
-		List of Corporations and their current state -> Stock Market Map<Corporation,StockQuote>
+		List of Corporations and their current state -> Stock Market List<StockQuote>
 			current stock price and no of available shares -> Stock Quote
 
 		

@@ -49,9 +49,9 @@ public class BoardImpl implements AquireBoard {
 	 * @see com.miniaturesolutions.aquire.AquireBoard#placeTile(com.miniaturesolutions.aquire.Tile)
 	 */
     @Override
-	public void placeTile(Tile tile) {
+	public void placeTile(Tile tile, Corporation corp) {
         placedTiles.put(tile.toString(), 
-        		new AbstractMap.SimpleEntry<>(tile,new Corporation(NamedCorporation.UNINCORPORATED)));
+        		new AbstractMap.SimpleEntry<>(tile,corp));
     }
 
     /* (non-Javadoc)
@@ -126,4 +126,16 @@ public class BoardImpl implements AquireBoard {
         }
         return tilePresent;
     }
+
+	@Override
+	public List<Corporation> getAffectedCorporations(Tile tile) {
+
+		List<Corporation> affctedCorporations = new LinkedList<>();
+		List<Entry<Tile, Corporation>> tiles = getAffectedTiles(tile);
+		
+		for(Entry<Tile, Corporation> affectedTile: tiles) {
+			affctedCorporations.add(affectedTile.getValue());
+		}
+		return affctedCorporations;
+	}
 }
