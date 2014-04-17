@@ -114,7 +114,8 @@ public class AquireGame {
 	private Corporation resolveCorporationMergers(List<Corporation> affectedCorporations) {
 		Corporation winner = null;
 		boolean mergerOccuring = willAMergerOccur(affectedCorporations);
-		
+		List<NamedCorporation> winnerOptions = new LinkedList<>();
+
 		NamedCorporation winnerName = NamedCorporation.UNINCORPORATED;
 		if (mergerOccuring) {
 			// #TODO : need to cope with more than 2 corporations merging...
@@ -125,24 +126,50 @@ public class AquireGame {
 				for(Corporation corporation : affectedCorporations) {
 					if (corporation.getCorporationName() != NamedCorporation.UNINCORPORATED) {
 						mergerCorporations.add(new StockQuote(corporation));
+						winnerOptions.add(corporation.getCorporationName());
 					}
 				}
-				
 				winnerName = player.resolveMerger(mergerCorporations);
-			} 
+			} else {
+				winnerName = winner.getCorporationName();
+			}
+
 		} else { //if(mergerCheck == NamedCorporation.UNINCORPORATED) {
-		//if all tiles unincorporated then form corporation 
-			winnerName = player.selectCorporationToForm(adviser.availableCorporations());
+			//if all tiles unincorporated then form corporation 
+			List<StockQuote> choices = adviser.availableCorporations();
+			for(StockQuote quote: choices) {
+				winnerOptions.add(quote.getCorporation());		
+			}
+			winnerName = player.selectCorporationToForm(choices);			
 		}
-		
+
+		//need to validate that the winner was in the list of options!!!
+
 		if (winner == null) {
-			for(Corporation corp: affectedCorporations) {
+			for(Corporation corp: this.corporations) {
 				if (corp.getCorporationName() == winnerName) {
 					winner = corp;
-					break;
-				}
-			}			
+				} 
+			}
 		}
+
+		Corporation loser = null;
+
+		for(Corporation corp: affectedCorporations) {
+			if (corp.getCorporationName() != winnerName) {
+				loser = corp;
+				break;
+			}
+		}	
+
+		Chain winnerChain = winner.getChain();
+		Chain loserChain = loser.getChain();
+		winnerChain.merge(loserChain);
+		loserChain.clear();
+
+		winner.setStatus(Status.ACTIVE);
+		loser.setStatus(Status.DEFUNCT);			
+		
 		return winner;
 	}
 }

@@ -115,11 +115,11 @@ public class AquireGameTest {
 		List<Corporation> affectedCorporations = new LinkedList<>();
 		affectedCorporations.add(new Corporation(NamedCorporation.UNINCORPORATED));
 		when(board.getAffectedCorporations(eq(tileToPlace))).thenReturn(affectedCorporations);
-		
+		when(player.selectCorporationToForm(any(List.class))).thenReturn(NamedCorporation.FESTIVAL);
 
 		AquireAdviser adviser = game.getAdviser();
 		
-		List<StockQuote> stockMarket = adviser.getStockMarket();
+//		List<StockQuote> stockMarket = adviser.getStockMarket();
 		
 		List<StockQuote> formationChoices = adviser.availableCorporations();
 		
@@ -129,7 +129,7 @@ public class AquireGameTest {
 		verify(player).placeTile(any(List.class)); //gets a list of tiles to place
 				
 		verify(player).selectCorporationToForm(eq(formationChoices));
-		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+		verify(player).purchaseShares(any(List.class),any(int.class));
 
 	}
 	
@@ -148,6 +148,12 @@ public class AquireGameTest {
 		activeCorp2.setStatus(Status.ACTIVE);
 		Chain chain2 = activeCorp2.getChain();
 		chain2.addTile(new Tile(1,1));
+
+		Corporation activeCorp3 = corporations.get(2);
+		activeCorp3.setStatus(Status.ACTIVE);
+		Chain chain3 = activeCorp3.getChain();
+		chain3.addTile(new Tile(1,1));
+		chain3.addTile(new Tile(1,1));    //should be ultimate winner and 1/2 are chosen from...
 		
 		assertEquals("corporations are same size", activeCorp1.getTileCount(), activeCorp2.getTileCount());
 		
@@ -160,6 +166,7 @@ public class AquireGameTest {
 		List<Corporation> affectedCorporations = new LinkedList<>();
 		affectedCorporations.add(activeCorp1);
 		affectedCorporations.add(activeCorp2);
+		affectedCorporations.add(activeCorp3);
 		affectedCorporations.add(new Corporation(NamedCorporation.UNINCORPORATED));
 		
 		when(board.getAffectedCorporations(eq(tileToPlace))).thenReturn(affectedCorporations);
@@ -172,8 +179,8 @@ public class AquireGameTest {
 			}
 		}
 		
-		List<StockQuote> formationChoices = adviser.availableCorporations();
-		List<StockQuote> stockMarket = adviser.getStockMarket();
+//		List<StockQuote> formationChoices = adviser.availableCorporations();
+//		List<StockQuote> stockMarket = adviser.getStockMarket();
 
 
 		when(player.resolveMerger(any(List.class))).thenReturn(activeCorp2.getCorporationName());
@@ -186,7 +193,13 @@ public class AquireGameTest {
 		verify(player).placeTile(any(List.class)); //gets a list of tiles to place		
 
 		verify(player).resolveMerger(eq(mergerCorporations));
-		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+//		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+		verify(player).purchaseShares(any(List.class),any(int.class));
+		
+		assertEquals("corp one should have no tiles", 0, chain1.getTileCount());
+		assertEquals("corp 2 should have 0 tiles", 0, chain2.getTileCount());
+		assertEquals("corp 3 should have 4 tiles", 4, chain3.getTileCount());
+
 	}
 	
 	@Test
@@ -226,14 +239,19 @@ public class AquireGameTest {
 		}
 		
 		List<StockQuote> formationChoices = adviser.availableCorporations();
-		List<StockQuote> stockMarket = adviser.getStockMarket();
+		//List<StockQuote> stockMarket = adviser.getStockMarket();
 		
 		game.playGame();
 		verify(board).getAffectedCorporations(eq(tileToPlace));
 		verify(player).placeTile(any(List.class)); //gets a list of tiles to place		
 
 		verify(player, never()).resolveMerger(eq(mergerCorporations));
-		verify(player).purchaseShares(eq(stockMarket),any(int.class));
+		verify(player).purchaseShares(any(List.class),any(int.class));
+		assertEquals("corp one should have 3 tiles", 3, chain1.getTileCount());
+		assertEquals("corp 2 should have 0 tiles", 0, chain2.getTileCount());
+		
+		assertEquals("corp 1 active", Status.ACTIVE, activeCorp1.getStatus());
+		assertEquals("corp 2 defunct", Status.DEFUNCT, activeCorp2.getStatus());
 	}
 
 

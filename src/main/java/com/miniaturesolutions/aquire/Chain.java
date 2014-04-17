@@ -16,9 +16,7 @@ public class Chain {
      * @param testTile
      */
     private List<Tile> tiles = new LinkedList<>();
-    
-    private NamedCorporation owner;
-
+ 
     /**
      * Takes ownership of tile
      * @param tile
@@ -37,37 +35,24 @@ public class Chain {
     }
 
 
-    /** return a new chain representing the merged chains **/
-    public Chain merge(Chain chainToMerge) {
+    /** adds the chain to merge to the current chain **/
+    public void merge(Chain chainToMerge) {
 
-        Chain mergedChain = new Chain();
+   //     Chain mergedChain = new Chain();
 
-        mergedChain.addAllTiles(this);
-        mergedChain.addAllTiles(chainToMerge);
+   //     mergedChain.addAllTiles(this);
+        this.addAllTiles(chainToMerge);
 
-        return mergedChain;
-    }
-
-
-	/**
-	 * Set the chains owning corporation
-	 * @param owner
-	 */
-	public void setCorporation(NamedCorporation owner) {
-		this.owner = owner;
-	}
-	
-	/**
-	 * Who owns the chain
-	 * @return
-	 */
-	public NamedCorporation getCorporation() {
-		return owner;
-	}
+   //     return mergedChain;
+   	}
 
     protected void addAllTiles(Chain chain) {
         for(Tile tile: chain.tiles) {
             addTile(tile);
         }
     }
+
+	public void clear() {
+		tiles.clear();	
+	}
 }
