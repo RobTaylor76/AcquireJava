@@ -1,11 +1,16 @@
 package com.miniaturesolutions.aquire;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
 public class Corporation {
 
 	private int availableShares;
-	private Chain chain = new Chain();
+	
+    private List<Tile> tiles = new LinkedList<>();
+    
 	private Status status;
 	final private NamedCorporation namedCorporation;
 	/** 
@@ -20,10 +25,6 @@ public class Corporation {
 
 	public int getRemainingShareCount() {
 		return this.availableShares;
-	}
-
-	public Chain getChain() {
-		return chain;
 	}
 
 	/**
@@ -63,7 +64,7 @@ public class Corporation {
      * @return
      */
     public int getTileCount() {
-        return chain.getTileCount();
+        return tiles.size();
     }
 	
 	/**
@@ -71,7 +72,8 @@ public class Corporation {
 	 * @param tile
 	 */
 	public void addTile(Tile tile) {
-		chain.addTile(tile);
+		tiles.add(tile);
+		this.status = Status.ACTIVE;
 	}
 
 	/**
@@ -80,5 +82,20 @@ public class Corporation {
 	 */
 	public NamedCorporation getCorporationName() {
 		return namedCorporation;
+	}
+
+	/** 
+	 * Merge the 2 corporations... 
+	 * loser corporation will become defunt
+	 * all it's tiles will be merged into winner 
+	 * @param loser
+	 */
+	public void merge(Corporation loser) {
+        for(Tile tile: loser.tiles) {
+            addTile(tile);
+        }
+
+		//loser corporation... needs to ask it's share holders to sell/keep or trade their shares?
+		loser.setStatus(Status.DEFUNCT);		
 	}
 }

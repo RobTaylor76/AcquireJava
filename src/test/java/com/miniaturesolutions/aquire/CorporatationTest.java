@@ -23,11 +23,10 @@ public class CorporatationTest {
 	@Test
 	public void testSharePrice() {
 		Corporation corp = new Corporation(NamedCorporation.AMERICAN);
-		Chain corpChain = corp.getChain();
 	
 		Tier corpTier = NamedCorporation.AMERICAN.getTier();
 		
-		int expectedPrice = corpTier.getSharePrice(corpChain.getTileCount());
+		int expectedPrice = corpTier.getSharePrice(corp.getTileCount());
 		
 		assertEquals("stock price should that of tier", expectedPrice, corp.getCurrentStockPrice());		
 	}
@@ -58,7 +57,13 @@ public class CorporatationTest {
 	
 	@Test
 	public void formCorporation() {
+		Corporation corp = new Corporation(NamedCorporation.AMERICAN);
+		assertTrue("should be active corp", Status.DORMANT == corp.getStatus());
+
+		corp.addTile(new Tile(1,0));
 		
+		assertTrue("should be active corp", Status.ACTIVE == corp.getStatus());
+
 		//illegal state if not DORMANT or DEFUNT
 	}
 }

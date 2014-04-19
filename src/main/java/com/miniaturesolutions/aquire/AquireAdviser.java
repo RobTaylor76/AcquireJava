@@ -22,5 +22,6 @@ public interface AquireAdviser {
 	 * @return List of stock market quotes for the available corporations
 	 */
 	public abstract List<StockQuote> availableCorporations();
+	
 
 }

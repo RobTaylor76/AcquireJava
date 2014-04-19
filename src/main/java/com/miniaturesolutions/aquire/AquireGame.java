@@ -15,9 +15,10 @@ import com.miniaturesolutions.aquire.NamedCorporation.Status;
  * @author rob
  *
  */
-public class AquireGame {
-
-	final private AquireAdviser adviser;
+public class AquireGame implements AquireAdviser {
+	final Status[] activeStatuses =  {Status.ACTIVE};
+	final Status[] availableStatuses =  {Status.DEFUNCT, Status.DORMANT};
+	
 	final private AquireBoard board;
     final private List<Corporation> corporations;
 	private PlayerStrategy player;
@@ -28,8 +29,7 @@ public class AquireGame {
 	 */
 	public AquireGame(AquireFactory factory) {
 		this.board = factory.createBoard();
-		this.corporations = factory.createCorporations();
-        this.adviser = factory.createAdviser(this.board, this.corporations);	
+		this.corporations = factory.createCorporations();	
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class AquireGame {
      * @return
      */
 	public AquireAdviser getAdviser() {
-		return adviser;
+		return this;
 	}
 
 	/**
@@ -91,9 +91,10 @@ public class AquireGame {
 		} else {
 			tilesCorporation = resolveCorporationMergers(affectedTiles);
 		}
+		tilesCorporation.addTile(placedTile);
 		board.placeTile(placedTile, tilesCorporation);
 		
-		player.purchaseShares(adviser.getStockMarket(), 0);
+		player.purchaseShares(getStockMarket(), 0);
 	}
 	
 	private boolean willAMergerOccur(List<Corporation> affectedTiles) {
@@ -114,62 +115,93 @@ public class AquireGame {
 	private Corporation resolveCorporationMergers(List<Corporation> affectedCorporations) {
 		Corporation winner = null;
 		boolean mergerOccuring = willAMergerOccur(affectedCorporations);
-		List<NamedCorporation> winnerOptions = new LinkedList<>();
 
 		NamedCorporation winnerName = NamedCorporation.UNINCORPORATED;
+		List<StockQuote> quotations = null;
+		
 		if (mergerOccuring) {
 			// #TODO : need to cope with more than 2 corporations merging...
 			winner = whoWinsMerge(affectedCorporations.get(0),affectedCorporations.get(1));
 			if (winner == null) {
-				List<StockQuote> mergerCorporations = new ArrayList<>();
-
-				for(Corporation corporation : affectedCorporations) {
-					if (corporation.getCorporationName() != NamedCorporation.UNINCORPORATED) {
-						mergerCorporations.add(new StockQuote(corporation));
-						winnerOptions.add(corporation.getCorporationName());
-					}
-				}
-				winnerName = player.resolveMerger(mergerCorporations);
+				quotations = getStockQuotes(affectedCorporations);
+				winnerName = player.resolveMerger(quotations);
 			} else {
 				winnerName = winner.getCorporationName();
 			}
 
 		} else { //if(mergerCheck == NamedCorporation.UNINCORPORATED) {
-			//if all tiles unincorporated then form corporation 
-			List<StockQuote> choices = adviser.availableCorporations();
-			for(StockQuote quote: choices) {
-				winnerOptions.add(quote.getCorporation());		
-			}
-			winnerName = player.selectCorporationToForm(choices);			
+			//if all tiles unincorporated then form corporation
+			quotations = availableCorporations();
+			winnerName = player.selectCorporationToForm(quotations);			
 		}
 
-		//need to validate that the winner was in the list of options!!!
-
-		if (winner == null) {
-			for(Corporation corp: this.corporations) {
-				if (corp.getCorporationName() == winnerName) {
-					winner = corp;
-				} 
+		if (winner == null) { // player had to pick the winner....
+			//need to validate that the winner was in the list of options!!!
+			for(StockQuote quote: quotations) {
+				if (winnerName == quote.getCorporation()) {
+					for(Corporation corp: this.corporations) {
+						if (corp.getCorporationName() == winnerName) {
+							winner = corp;
+						} 
+					}
+					break;
+				}
 			}
+//			if (winner == null) {
+//				player sent back invalid choice.... exception????? invalid_state?
+//			}
 		}
 
-		Corporation loser = null;
-
-		for(Corporation corp: affectedCorporations) {
-			if (corp.getCorporationName() != winnerName) {
-				loser = corp;
-				break;
+		// have multiple losers!!!
+		for(Corporation loser: affectedCorporations) {
+			if (loser.getCorporationName() != winnerName) {
+				// can get corporation to internalise these?
+				winner.merge(loser);
 			}
 		}	
-
-		Chain winnerChain = winner.getChain();
-		Chain loserChain = loser.getChain();
-		winnerChain.merge(loserChain);
-		loserChain.clear();
-
-		winner.setStatus(Status.ACTIVE);
-		loser.setStatus(Status.DEFUNCT);			
-		
 		return winner;
+	}
+		
+	private List<Corporation> filterCorporationsByState(Status[] statuses) {
+		List<Corporation> filteredCorporations = new LinkedList<>();
+		
+		for(Corporation corp : corporations) {
+            for(Status status: statuses) {
+            	if (status == corp.getStatus()) {
+            		filteredCorporations.add(corp);
+    			}       	
+            }
+		}
+		return filteredCorporations;
+	}
+	
+	
+	private List<StockQuote> getStockQuotes(List<Corporation> corporations) {
+		
+		List<StockQuote> stockQuotes = new ArrayList<>();
+
+		for(Corporation corporation : corporations) {
+			if (corporation.getCorporationName() != NamedCorporation.UNINCORPORATED) {
+				stockQuotes.add(new StockQuote(corporation));
+			}
+		}
+		
+		return stockQuotes;
+	}
+
+	@Override
+	public boolean willTileCauseMerger(Tile tile) {
+		return  board.willTileCauseMerger(tile);
+	}
+
+	@Override
+	public List<StockQuote> getStockMarket() {
+		return getStockQuotes(filterCorporationsByState(activeStatuses));
+	}
+
+	@Override
+	public List<StockQuote> availableCorporations() {
+		// TODO Auto-generated method stub
+		return getStockQuotes(filterCorporationsByState(availableStatuses));
 	}
 }

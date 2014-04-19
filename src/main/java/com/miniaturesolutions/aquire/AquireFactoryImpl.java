@@ -24,9 +24,4 @@ public class AquireFactoryImpl implements AquireFactory {
 		return new BoardImpl();
 	}
 
-	@Override
-	public AquireAdviser createAdviser(AquireBoard board, List<Corporation> corporations) {
-		return new AdviserImpl(board, corporations);
-	}
-
 }
