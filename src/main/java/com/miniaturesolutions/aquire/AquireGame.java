@@ -2,6 +2,7 @@ package com.miniaturesolutions.aquire;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,30 +33,30 @@ public class AquireGame implements AquireAdviser {
 		this.corporations = factory.createCorporations();	
 	}
 
-	/**
-	 * Which of the 2 Corporations is the winner in a merger?
-	 * @param corp1
-	 * @param corp2
-	 * @return winner or null if a tie
-	 */
-    protected Corporation whoWinsMerge(Corporation corp1, Corporation corp2) {
-		Corporation winner = null; // if no clear winner then we need to make a choice, just return null for now
-
-		if (corp1.getCorporationName() == NamedCorporation.UNINCORPORATED) {
-			winner = corp2;
-		}
-		if (corp2.getCorporationName() == NamedCorporation.UNINCORPORATED) {
-			winner = corp1;
-		}
-		
-		if (corp1.getTileCount() > corp2.getTileCount()) {
-			winner = corp1;
-		} else if (corp2.getTileCount() > corp1.getTileCount()) {
-			winner = corp2;
-		}
-
-		return winner;
-	 }
+//	/**
+//	 * Which of the 2 Corporations is the winner in a merger?
+//	 * @param corp1
+//	 * @param corp2
+//	 * @return winner or null if a tie
+//	 */
+//    protected Corporation whoWinsMerge(Corporation corp1, Corporation corp2) {
+//		Corporation winner = null; // if no clear winner then we need to make a choice, just return null for now
+//
+//		if (corp1.getCorporationName() == NamedCorporation.UNINCORPORATED) {
+//			winner = corp2;
+//		}
+//		if (corp2.getCorporationName() == NamedCorporation.UNINCORPORATED) {
+//			winner = corp1;
+//		}
+//		
+//		if (corp1.getTileCount() > corp2.getTileCount()) {
+//			winner = corp1;
+//		} else if (corp2.getTileCount() > corp1.getTileCount()) {
+//			winner = corp2;
+//		}
+//
+//		return winner;
+//	 }
     
     
     /**
@@ -120,10 +121,29 @@ public class AquireGame implements AquireAdviser {
 		List<StockQuote> quotations = null;
 		
 		if (mergerOccuring) {
-			// #TODO : need to cope with more than 2 corporations merging...
-			winner = whoWinsMerge(affectedCorporations.get(0),affectedCorporations.get(1));
+			//need to sort the list descending...
+			Collections.sort(affectedCorporations, new Comparator<Corporation>() { 
+				@Override
+				public int compare(Corporation corp1, Corporation corp2) {
+					return (corp1.compareTo(corp2)*-1);
+				}});
+			List<Corporation> choices = new ArrayList<>();
+			//Should have at most 4 tiles...
+			int maxTileCount = 0;
+			for( Corporation corp : affectedCorporations) {
+				int count = corp.getTileCount();
+				if (count >= maxTileCount && corp.getCorporationName() != NamedCorporation.UNINCORPORATED) {
+					maxTileCount = count;
+					choices.add(corp);
+				}
+			}
+			//Either we have 1 clear winner or we can have up to 4 other corporations...
+			if (choices.size() == 1) {
+				winner = choices.get(0);
+			}
+
 			if (winner == null) {
-				quotations = getStockQuotes(affectedCorporations);
+				quotations = getStockQuotes(choices);
 				winnerName = player.resolveMerger(quotations);
 			} else {
 				winnerName = winner.getCorporationName();
@@ -142,9 +162,9 @@ public class AquireGame implements AquireAdviser {
 					for(Corporation corp: this.corporations) {
 						if (corp.getCorporationName() == winnerName) {
 							winner = corp;
+							break;
 						} 
 					}
-					break;
 				}
 			}
 //			if (winner == null) {

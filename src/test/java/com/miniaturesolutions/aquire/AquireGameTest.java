@@ -44,37 +44,37 @@ public class AquireGameTest {
 	}
 
 
-	@Test 
-	public void resolveMerges() {
-
-		Corporation corp1 = new Corporation(NamedCorporation.UNINCORPORATED);
-		Corporation corp2 = new Corporation(NamedCorporation.AMERICAN);
-
-
-		Corporation winner = game.whoWinsMerge(corp1,corp2);
-		assertEquals("AMERICAN should win", corp2, winner);
-
-        winner = game.whoWinsMerge(corp2,corp1);
-        assertEquals("AMERICAN should win", corp2, winner);
-
-		corp1 = new Corporation(NamedCorporation.SACKSON);
-
-		//chain with most tiles wins
-		for(int i=0; i<3; i++) {
-			corp1.addTile(new Tile(i,0));
-			corp2.addTile(new Tile(0,i));
-		}
-
-		winner = game.whoWinsMerge(corp1,corp2);    	
-		assertNull("no winner as both have same number of tiles", winner);  
-
-		corp1.addTile(new Tile(4,0));
-		winner = game.whoWinsMerge(corp1,corp2);      	
-		assertEquals("SACKSON should win", corp1, winner);
-
-        winner = game.whoWinsMerge(corp2,corp1);
-        assertEquals("SACKSON should win", corp1, winner);
-    }
+//	@Test 
+//	public void resolveMerges() {
+//
+//		Corporation corp1 = new Corporation(NamedCorporation.UNINCORPORATED);
+//		Corporation corp2 = new Corporation(NamedCorporation.AMERICAN);
+//
+//
+//		Corporation winner = game.whoWinsMerge(corp1,corp2);
+//		assertEquals("AMERICAN should win", corp2, winner);
+//
+//        winner = game.whoWinsMerge(corp2,corp1);
+//        assertEquals("AMERICAN should win", corp2, winner);
+//
+//		corp1 = new Corporation(NamedCorporation.SACKSON);
+//
+//		//chain with most tiles wins
+//		for(int i=0; i<3; i++) {
+//			corp1.addTile(new Tile(i,0));
+//			corp2.addTile(new Tile(0,i));
+//		}
+//
+//		winner = game.whoWinsMerge(corp1,corp2);    	
+//		assertNull("no winner as both have same number of tiles", winner);  
+//
+//		corp1.addTile(new Tile(4,0));
+//		winner = game.whoWinsMerge(corp1,corp2);      	
+//		assertEquals("SACKSON should win", corp1, winner);
+//
+//        winner = game.whoWinsMerge(corp2,corp1);
+//        assertEquals("SACKSON should win", corp1, winner);
+//    }
 
 	@Test
 	public void playerPlacesIsolatedTile() {
@@ -155,13 +155,19 @@ public class AquireGameTest {
 		Corporation activeCorp2 = corporations.get(1);
 		activeCorp2.setStatus(Status.ACTIVE);
 		activeCorp2.addTile(new Tile(1,1));
+		activeCorp2.addTile(new Tile(1,1));
 
 		Corporation activeCorp3 = corporations.get(2);
 		activeCorp3.setStatus(Status.ACTIVE);
 		activeCorp3.addTile(new Tile(1,1));
 		activeCorp3.addTile(new Tile(1,1));    //should be ultimate winner and 1/2 are chosen from...
 		
-		assertEquals("corporations are same size", activeCorp1.getTileCount(), activeCorp2.getTileCount());
+		Corporation activeCorp4 = new Corporation(NamedCorporation.UNINCORPORATED);
+		activeCorp4.setStatus(Status.ACTIVE);
+		activeCorp4.addTile(new Tile(1,1));
+		activeCorp4.addTile(new Tile(1,1));
+		
+		assertEquals("corporations are same size", activeCorp2.getTileCount(), activeCorp3.getTileCount());
 		
 		AquireAdviser adviser = game.getAdviser();
 		
@@ -173,17 +179,15 @@ public class AquireGameTest {
 		affectedCorporations.add(activeCorp1);
 		affectedCorporations.add(activeCorp2);
 		affectedCorporations.add(activeCorp3);
+		affectedCorporations.add(activeCorp4);
 		affectedCorporations.add(new Corporation(NamedCorporation.UNINCORPORATED));
 		
 		when(board.getAffectedCorporations(eq(tileToPlace))).thenReturn(affectedCorporations);
 		
 		List<StockQuote> mergerCorporations = new ArrayList<>();
 		
-		for(Corporation corp : affectedCorporations) {
-			if (corp.getCorporationName() != NamedCorporation.UNINCORPORATED) {
-				mergerCorporations.add(new StockQuote(corp));
-			}
-		}
+		mergerCorporations.add(new StockQuote(activeCorp2));
+		mergerCorporations.add(new StockQuote(activeCorp3));
 		
 //		List<StockQuote> formationChoices = adviser.availableCorporations();
 //		List<StockQuote> stockMarket = adviser.getStockMarket();
@@ -203,8 +207,8 @@ public class AquireGameTest {
 		verify(player).purchaseShares(any(List.class),any(int.class));
 		
 		assertEquals("corp one should have no tiles", 0, activeCorp1.getTileCount());
-		assertEquals("corp 2 should have 0 tiles", 0, activeCorp2.getTileCount());
-		assertEquals("corp 3 should have 4 tiles", 4, activeCorp3.getTileCount());
+		assertEquals("corp 2 should have 8 tiles", 8, activeCorp2.getTileCount());
+		assertEquals("corp 3 should have 0 tiles", 0, activeCorp3.getTileCount());
 
 	}
 	
@@ -220,7 +224,7 @@ public class AquireGameTest {
 		
 		Corporation activeCorp2 = corporations.get(1);
 		activeCorp2.setStatus(Status.ACTIVE);
-		activeCorp1.addTile(new Tile(1,1));
+		activeCorp2.addTile(new Tile(1,1));
 		
 		assertNotEquals("corporations are not the same size", activeCorp1.getTileCount(), activeCorp2.getTileCount());
 		

@@ -1,11 +1,13 @@
 package com.miniaturesolutions.aquire;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.LinkedList;
 import java.util.List;
 
 import com.miniaturesolutions.aquire.NamedCorporation.Status;
 
-public class Corporation {
+public class Corporation implements Comparable<Corporation> {
 
 	private int availableShares;
 	
@@ -94,8 +96,20 @@ public class Corporation {
         for(Tile tile: loser.tiles) {
             addTile(tile);
         }
+        loser.defuntCompany();
+	}
 
+	public void defuntCompany() {
 		//loser corporation... needs to ask it's share holders to sell/keep or trade their shares?
-		loser.setStatus(Status.DEFUNCT);		
+		setStatus(Status.DEFUNCT);
+		tiles.clear();
+	}
+	
+	@Override
+	/**
+	 * CompareTo work of the currentTileCount
+	 */
+	public int compareTo(Corporation compare) {
+		return Integer.compare(this.getTileCount(), compare.getTileCount());
 	}
 }

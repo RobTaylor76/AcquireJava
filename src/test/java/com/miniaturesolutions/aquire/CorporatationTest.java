@@ -66,4 +66,21 @@ public class CorporatationTest {
 
 		//illegal state if not DORMANT or DEFUNT
 	}
+	
+	@Test 
+	public void comparator() {
+		
+		Corporation corp1 = new Corporation(NamedCorporation.AMERICAN);
+		corp1.addTile(new Tile(1,0));
+		Corporation corp2 = new Corporation(NamedCorporation.AMERICAN);
+		corp2.addTile(new Tile(1,0));
+		Corporation corp3 = new Corporation(NamedCorporation.AMERICAN);
+		corp3.addTile(new Tile(1,0));
+		corp3.addTile(new Tile(1,0));
+		
+		assertEquals("should be equal", 0, corp1.compareTo(corp2));
+		assertEquals("should be less", -1, corp1.compareTo(corp3));
+		assertEquals("should be greater than", 1, corp3.compareTo(corp1));
+		
+	}
 }
