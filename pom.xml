@@ -117,17 +117,6 @@
 
             -->
 
-         <plugin>
-           <groupId>org.codehaus.mojo</groupId>
-           <artifactId>findbugs-maven-plugin</artifactId>
-           <version>2.5.2</version>
-           <configuration>
-              <findbugsXmlOutput>true</findbugsXmlOutput>
-              <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-              <xmlOutput>true</xmlOutput>
-           </configuration>
-        </plugin>
-
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -184,14 +173,25 @@
         </plugins>
     </build>
 
-<!--    <reporting>
-        <plugins>
-            <plugin>
+   <reporting>
+          <plugins>
+          <plugin>
+           <groupId>org.codehaus.mojo</groupId>
+           <artifactId>findbugs-maven-plugin</artifactId>
+           <version>2.5.2</version>
+           <configuration>
+              <findbugsXmlOutput>true</findbugsXmlOutput>
+              <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+              <xmlOutput>true</xmlOutput>
+           </configuration>
+        </plugin>
+
+           <!-- <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.6</version>
-            </plugin>
+            </plugin>   -->
         </plugins>
     </reporting>
-    -->
+ 
 </project>
