@@ -5,20 +5,20 @@ import java.util.List;
 public class TestAquireFactory implements AquireFactory {
 
 	private AquireBoard board;
-	private List<Corporation> corporations;
+	private List<Corporation> corporationImpls;
 	private AquireFactory factory;
 	
 	public TestAquireFactory() {
 		this.factory = new AquireFactoryImpl();
 		this.board = factory.createBoard();
-		this.corporations = factory.createCorporations();
+		this.corporationImpls = factory.createCorporations();
 	}
 	/**
 	 * Will return the same corporations every time...
 	 */
 	@Override
 	public List<Corporation> createCorporations() {
-		return corporations;
+		return corporationImpls;
 	}
 
 	/**

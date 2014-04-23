@@ -20,8 +20,8 @@ public class StockQuoteTest {
     @Test
     public void testEquality() {
 
-        Corporation ca = new Corporation(NamedCorporation.AMERICAN);
-        Corporation cb = new Corporation(NamedCorporation.CONTINENTAL);
+        Corporation ca = new CorporationImpl(NamedCorporation.AMERICAN);
+        Corporation cb = new CorporationImpl(NamedCorporation.CONTINENTAL);
 
         StockQuote a = new StockQuote(ca);
         StockQuote b = new StockQuote(ca);
@@ -29,6 +29,8 @@ public class StockQuoteTest {
 
         assertTrue("same tile", a.equals(b));
         assertTrue("same tile", b.equals(a));
+        
+        assertEquals("same hashcode", a.hashCode(), b.hashCode());
 
         assertFalse("diferent tile", c.equals(a));
         assertFalse("diferent tile", a.equals(c));

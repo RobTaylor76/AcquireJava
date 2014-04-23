@@ -13,7 +13,7 @@ public class CorporatationTest {
 	public void createCorporation() {
 		
 		for(NamedCorporation def : NamedCorporation.values()) {
-			Corporation newCorp = new Corporation(def);
+			Corporation newCorp = new CorporationImpl(def);
 			assertEquals("Should have correct number of shares", def.getTotalShareCount(), 
 																	newCorp.getRemainingShareCount());
 			assertEquals("should be dormatn", Status.DORMANT, newCorp.getStatus());
@@ -22,7 +22,7 @@ public class CorporatationTest {
 	
 	@Test
 	public void testSharePrice() {
-		Corporation corp = new Corporation(NamedCorporation.AMERICAN);
+		Corporation corp = new CorporationImpl(NamedCorporation.AMERICAN);
 	
 		Tier corpTier = NamedCorporation.AMERICAN.getTier();
 		
@@ -33,7 +33,7 @@ public class CorporatationTest {
 	
     @Test
     public void safeCorporation() {
-		Corporation corp = new Corporation(NamedCorporation.AMERICAN);
+		Corporation corp = new CorporationImpl(NamedCorporation.AMERICAN);
 
         Tile testTile1 = new Tile(0,0);    	
     	assertFalse("Should not be safe", corp.isSafe());
@@ -57,7 +57,7 @@ public class CorporatationTest {
 	
 	@Test
 	public void formCorporation() {
-		Corporation corp = new Corporation(NamedCorporation.AMERICAN);
+		Corporation corp = new CorporationImpl(NamedCorporation.AMERICAN);
 		assertTrue("should be active corp", Status.DORMANT == corp.getStatus());
 
 		corp.addTile(new Tile(1,0));
@@ -70,11 +70,11 @@ public class CorporatationTest {
 	@Test 
 	public void comparator() {
 		
-		Corporation corp1 = new Corporation(NamedCorporation.AMERICAN);
+		CorporationImpl corp1 = new CorporationImpl(NamedCorporation.AMERICAN);
 		corp1.addTile(new Tile(1,0));
-		Corporation corp2 = new Corporation(NamedCorporation.AMERICAN);
+		CorporationImpl corp2 = new CorporationImpl(NamedCorporation.AMERICAN);
 		corp2.addTile(new Tile(1,0));
-		Corporation corp3 = new Corporation(NamedCorporation.AMERICAN);
+		CorporationImpl corp3 = new CorporationImpl(NamedCorporation.AMERICAN);
 		corp3.addTile(new Tile(1,0));
 		corp3.addTile(new Tile(1,0));
 		

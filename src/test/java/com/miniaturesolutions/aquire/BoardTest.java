@@ -31,7 +31,7 @@ public class BoardTest {
     @Test
     public void storeTilesOnBoard() {
 
-    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
+    	Corporation corp = new CorporationImpl(NamedCorporation.CONTINENTAL);
     	
         Tile testTile1 = new Tile(0,0);
         Tile testTile2 = new Tile(6,6);
@@ -62,7 +62,7 @@ public class BoardTest {
     
     @Test
     public void getBoardState() {
-    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
+    	CorporationImpl corp = new CorporationImpl(NamedCorporation.CONTINENTAL);
 
         
     	Tile testTile1 = new Tile(0,0);
@@ -83,7 +83,7 @@ public class BoardTest {
 	
     @Test
     public void getAffectedTiles() {
-    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
+    	CorporationImpl corp = new CorporationImpl(NamedCorporation.CONTINENTAL);
 
     	boardImpl.placeTile(new Tile(1,0), corp);
 		boardImpl.placeTile(new Tile(0,1), corp);
@@ -96,11 +96,11 @@ public class BoardTest {
         testTiles.add(new Tile(1,1)) ;
 
         for(Tile tile :testTiles) {
-            List<Entry<Tile,Corporation>> tileList = boardImpl.getAffectedTiles(tile);
+            List<Entry<Tile, Corporation>> tileList = boardImpl.getAffectedTiles(tile);
             assertEquals("should have 2 tiles", 2, tileList.size());
 
             Set<Tile> tiles = new HashSet<>();
-            for(Entry<Tile,Corporation> entry :tileList) {
+            for(Entry<Tile, Corporation> entry :tileList) {
                 tiles.add(entry.getKey());
             }
             assertTrue("Contains the correct tile", tiles.contains(new Tile(1,0)));
@@ -108,11 +108,11 @@ public class BoardTest {
             assertFalse("doesnt contain other tiles", tiles.contains(new Tile(8,10)));
         }
 
-        List<Entry<Tile,Corporation>> tileList = boardImpl.getAffectedTiles(new Tile(8,11));
+        List<Entry<Tile, Corporation>> tileList = boardImpl.getAffectedTiles(new Tile(8,11));
         assertEquals("should have 2 tiles", 2, tileList.size());
 
         Set<Tile> tiles = new HashSet<>();
-        for(Entry<Tile,Corporation> entry :tileList) {
+        for(Entry<Tile, Corporation> entry :tileList) {
             tiles.add(entry.getKey());
         }
         assertTrue("Contains the correct tile", tiles.contains(new Tile(8,10)));
@@ -123,10 +123,10 @@ public class BoardTest {
 
     @Test
     public void getAffectedCorporations() {
-    	Corporation corp1 = new Corporation(NamedCorporation.CONTINENTAL);
+    	Corporation corp1 = new CorporationImpl(NamedCorporation.CONTINENTAL);
 		boardImpl.placeTile(new Tile(1,0), corp1);
 		
-	   	Corporation corp2 = new Corporation(NamedCorporation.IMPERIAL);
+	   	Corporation corp2 = new CorporationImpl(NamedCorporation.IMPERIAL);
 		boardImpl.placeTile(new Tile(0,1), corp2);
 
 		List<Corporation> affectedCorporations = boardImpl.getAffectedCorporations(new Tile(0,0));
@@ -137,7 +137,7 @@ public class BoardTest {
     
 	@Test
 	public void willTileCauseMerge() {
-    	Corporation corp = new Corporation(NamedCorporation.CONTINENTAL);
+    	Corporation corp = new CorporationImpl(NamedCorporation.CONTINENTAL);
 
 		boardImpl.placeTile(new Tile(1,0), corp);
 		boardImpl.placeTile(new Tile(0,1), corp);

@@ -108,9 +108,9 @@ public class AquireGameTest {
 				
 		PlayerStrategy player = mock(PlayerStrategy.class);
 		
-		List<Corporation> corporations = factory.createCorporations();
+		List<Corporation> corporationImpls = factory.createCorporations();
 		
-		Corporation newCorp = corporations.get(0);
+		Corporation newCorp = corporationImpls.get(0);
 		assertTrue("should be active corp", Status.DORMANT == newCorp.getStatus());
 		
 		game.addPlayer(player);
@@ -121,7 +121,7 @@ public class AquireGameTest {
 		
 		
 		List<Corporation> affectedCorporations = new LinkedList<>();
-		affectedCorporations.add(new Corporation(NamedCorporation.UNINCORPORATED));
+		affectedCorporations.add(new CorporationImpl(NamedCorporation.UNINCORPORATED));
 		when(board.getAffectedCorporations(eq(tileToPlace))).thenReturn(affectedCorporations);
 		when(player.selectCorporationToForm(any(List.class))).thenReturn(newCorp.getCorporationName());
 
@@ -146,23 +146,23 @@ public class AquireGameTest {
 	@Test
 	public void playerPlacesTileThatCausesAmbiguousMerger() {
 		
-		List<Corporation> corporations = factory.createCorporations();
+		List<Corporation> corporationImpls = factory.createCorporations();
 		
-		Corporation activeCorp1 = corporations.get(0);
+		Corporation activeCorp1 = corporationImpls.get(0);
 		activeCorp1.setStatus(Status.ACTIVE);
 		activeCorp1.addTile(new Tile(1,1));
 
-		Corporation activeCorp2 = corporations.get(1);
+		Corporation activeCorp2 = corporationImpls.get(1);
 		activeCorp2.setStatus(Status.ACTIVE);
 		activeCorp2.addTile(new Tile(1,1));
 		activeCorp2.addTile(new Tile(1,1));
 
-		Corporation activeCorp3 = corporations.get(2);
+		Corporation activeCorp3 = corporationImpls.get(2);
 		activeCorp3.setStatus(Status.ACTIVE);
 		activeCorp3.addTile(new Tile(1,1));
 		activeCorp3.addTile(new Tile(1,1));    //should be ultimate winner and 1/2 are chosen from...
 		
-		Corporation activeCorp4 = new Corporation(NamedCorporation.UNINCORPORATED);
+		Corporation activeCorp4 = new CorporationImpl(NamedCorporation.UNINCORPORATED);
 		activeCorp4.setStatus(Status.ACTIVE);
 		activeCorp4.addTile(new Tile(1,1));
 		activeCorp4.addTile(new Tile(1,1));
@@ -180,7 +180,7 @@ public class AquireGameTest {
 		affectedCorporations.add(activeCorp2);
 		affectedCorporations.add(activeCorp3);
 		affectedCorporations.add(activeCorp4);
-		affectedCorporations.add(new Corporation(NamedCorporation.UNINCORPORATED));
+		affectedCorporations.add(new CorporationImpl(NamedCorporation.UNINCORPORATED));
 		
 		when(board.getAffectedCorporations(eq(tileToPlace))).thenReturn(affectedCorporations);
 		
@@ -215,14 +215,14 @@ public class AquireGameTest {
 	@Test
 	public void playerPlacesTileThatCausesUnAmbiguousMerger() {
 		
-		List<Corporation> corporations = factory.createCorporations();
+		List<Corporation> corporationImpls = factory.createCorporations();
 		
-		Corporation activeCorp1 = corporations.get(0);
+		Corporation activeCorp1 = corporationImpls.get(0);
 		activeCorp1.setStatus(Status.ACTIVE);
 		activeCorp1.addTile(new Tile(1,1));
 		activeCorp1.addTile(new Tile(2,1));
 		
-		Corporation activeCorp2 = corporations.get(1);
+		Corporation activeCorp2 = corporationImpls.get(1);
 		activeCorp2.setStatus(Status.ACTIVE);
 		activeCorp2.addTile(new Tile(1,1));
 		
@@ -266,9 +266,9 @@ public class AquireGameTest {
 	@Test
 	public void getStockMarket() {
 		
-		List<Corporation> corporations = factory.createCorporations();
+		List<Corporation> corporationImpls = factory.createCorporations();
 		
-		Corporation corp = corporations.get(0);
+		Corporation corp = corporationImpls.get(0);
 		
 		
 		//no active corporations... no available corporations
@@ -318,9 +318,9 @@ public class AquireGameTest {
 	
 	@Test
 	public void getAvailableCorporations() {
-		List<Corporation> corporations = factory.createCorporations();
+		List<Corporation> corporationImpls = factory.createCorporations();
 		
-		Corporation corp = corporations.get(0);
+		Corporation corp = corporationImpls.get(0);
 		corp.setStatus(Status.ACTIVE);
 				
 		List<StockQuote> availableCorporations = adviser.availableCorporations();

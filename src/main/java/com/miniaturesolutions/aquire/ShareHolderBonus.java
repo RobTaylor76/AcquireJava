@@ -1,20 +1,20 @@
 package com.miniaturesolutions.aquire;
 
-public class ShareHolderBonus {
-	
-	final private int minority;
-	final private int majority;
+public final class ShareHolderBonus {
 
-	public ShareHolderBonus(int majority, int minority) {
-		this.minority = minority;
-		this.majority = majority;
-	}
+  final private int minority;
+  final private int majority;
 
-	public int getMinority() {
-		return minority;
-	}
+  public ShareHolderBonus(final int majority, final int minority) {
+    this.minority = minority;
+    this.majority = majority;
+  }
 
-	public int getMajority() {
-		return majority;
-	}
+  public int getMinority() {
+    return minority;
+  }
+
+  public int getMajority() {
+    return majority;
+  }
 }
