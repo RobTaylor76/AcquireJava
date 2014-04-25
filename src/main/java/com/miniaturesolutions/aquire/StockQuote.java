@@ -44,14 +44,13 @@ public final class StockQuote {
 
   @Override
   public boolean equals(final Object o) {
-    if (!(o instanceof StockQuote)) { 
-      return false;
+    if (!(o instanceof StockQuote)) {
+        return false;
     }
     StockQuote quote = (StockQuote) o;
     return (quote.getCorporation() == this.getCorporation())
       && (quote.getAvailableShares() == this.getAvailableShares())
       && (quote.getStockPrice() == this.getStockPrice());
-
   }
 
   @Override

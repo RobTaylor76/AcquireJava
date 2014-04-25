@@ -69,7 +69,7 @@ public enum NamedCorporation {
     }
 
     /**
-     * What is the current share price based on the number of tiles in 
+     * What is the current share price based on the number of tiles in
      * the corporation?
      * @param noOfTiles
      * @return the current share price

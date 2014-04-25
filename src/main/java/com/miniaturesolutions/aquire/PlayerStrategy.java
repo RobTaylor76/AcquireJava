@@ -13,7 +13,7 @@ public interface PlayerStrategy {
   Tile placeTile(List<Tile> validTiles);
 
   /**
-   * Placing the tile caused a corporation to form. 
+   * Placing the tile caused a corporation to form.
    * Choose which corporation to form
    *
    * A list of the Stock Quotes for available Corporations is provided
